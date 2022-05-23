@@ -1,10 +1,10 @@
 {
-  "name": "@prb/solidity-template",
-  "description": "Template for writing Solidity smart contracts",
+  "name": "crane",
+  "description": "Factory contracts for deploying new instances of ERC20 tokens, ERC721 tokens, and ERC1155 tokens for Origami customers",
   "version": "1.0.0",
   "author": {
-    "name": "Paul Razvan Berg",
-    "url": "https://github.com/paulrberg"
+    "name": "Stephen Caudill",
+    "url": "https://github.com/mrmemes-eth"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
@@ -66,9 +66,6 @@
     "solidity"
   ],
   "packageManager": "yarn@3.2.0",
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "clean": "shx rm -rf ./artifacts ./cache ./coverage ./src/types ./coverage.json",
     "commit": "git-cz",
