@@ -2584,56 +2584,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"Crane - used to erect new smart contracts@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "Crane - used to erect new smart contracts@workspace:."
-  dependencies:
-    "@ethersproject/abi": ^5.6.0
-    "@ethersproject/abstract-signer": ^5.6.0
-    "@ethersproject/bignumber": ^5.6.0
-    "@ethersproject/bytes": ^5.6.1
-    "@ethersproject/providers": ^5.6.2
-    "@nomiclabs/hardhat-ethers": ^2.0.5
-    "@nomiclabs/hardhat-etherscan": ^3.0.3
-    "@nomiclabs/hardhat-waffle": ^2.0.3
-    "@trivago/prettier-plugin-sort-imports": ^3.2.0
-    "@typechain/ethers-v5": ^10.0.0
-    "@typechain/hardhat": ^6.0.0
-    "@types/chai": ^4.3.0
-    "@types/fs-extra": ^9.0.13
-    "@types/mocha": ^9.1.0
-    "@types/node": ^17.0.23
-    "@typescript-eslint/eslint-plugin": ^5.17.0
-    "@typescript-eslint/parser": ^5.17.0
-    chai: ^4.3.6
-    cross-env: ^7.0.3
-    dotenv: ^16.0.0
-    eslint: ^8.12.0
-    eslint-config-prettier: ^8.5.0
-    ethereum-waffle: ^3.4.4
-    ethers: ^5.6.2
-    fs-extra: ^10.0.1
-    hardhat: ^2.9.2
-    hardhat-gas-reporter: ^1.0.8
-    husky: ^7.0.4
-    lint-staged: ^12.3.7
-    lodash: ^4.17.21
-    mocha: ^9.2.2
-    pinst: ^3.0.0
-    prettier: ^2.6.2
-    prettier-plugin-solidity: ^1.0.0-dev.21
-    shelljs: ^0.8.5
-    shx: ^0.3.4
-    solhint: ^3.3.7
-    solhint-plugin-prettier: ^0.0.5
-    solidity-coverage: ^0.7.20
-    ts-generator: ^0.1.1
-    ts-node: ^10.7.0
-    typechain: ^8.0.0
-    typescript: ^4.6.3
-  languageName: unknown
-  linkType: soft
-
 "abbrev@npm:1":
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
@@ -5057,6 +5007,56 @@ __metadata:
   checksum: 8b6f1d3c8a5ffdf663a952f17af0761adf210b7a5933d0fe8988f3ca3a1f0e1e5cbbb74d5b419c15933dd2fdcaec31dbc5cc85cb8259a822342b93b529eff89c
   languageName: node
   linkType: hard
+
+"crane@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "crane@workspace:."
+  dependencies:
+    "@ethersproject/abi": ^5.6.0
+    "@ethersproject/abstract-signer": ^5.6.0
+    "@ethersproject/bignumber": ^5.6.0
+    "@ethersproject/bytes": ^5.6.1
+    "@ethersproject/providers": ^5.6.2
+    "@nomiclabs/hardhat-ethers": ^2.0.5
+    "@nomiclabs/hardhat-etherscan": ^3.0.3
+    "@nomiclabs/hardhat-waffle": ^2.0.3
+    "@trivago/prettier-plugin-sort-imports": ^3.2.0
+    "@typechain/ethers-v5": ^10.0.0
+    "@typechain/hardhat": ^6.0.0
+    "@types/chai": ^4.3.0
+    "@types/fs-extra": ^9.0.13
+    "@types/mocha": ^9.1.0
+    "@types/node": ^17.0.23
+    "@typescript-eslint/eslint-plugin": ^5.17.0
+    "@typescript-eslint/parser": ^5.17.0
+    chai: ^4.3.6
+    cross-env: ^7.0.3
+    dotenv: ^16.0.0
+    eslint: ^8.12.0
+    eslint-config-prettier: ^8.5.0
+    ethereum-waffle: ^3.4.4
+    ethers: ^5.6.2
+    fs-extra: ^10.0.1
+    hardhat: ^2.9.2
+    hardhat-gas-reporter: ^1.0.8
+    husky: ^7.0.4
+    lint-staged: ^12.3.7
+    lodash: ^4.17.21
+    mocha: ^9.2.2
+    pinst: ^3.0.0
+    prettier: ^2.6.2
+    prettier-plugin-solidity: ^1.0.0-dev.21
+    shelljs: ^0.8.5
+    shx: ^0.3.4
+    solhint: ^3.3.7
+    solhint-plugin-prettier: ^0.0.5
+    solidity-coverage: ^0.7.20
+    ts-generator: ^0.1.1
+    ts-node: ^10.7.0
+    typechain: ^8.0.0
+    typescript: ^4.6.3
+  languageName: unknown
+  linkType: soft
 
 "crc-32@npm:^1.2.0":
   version: 1.2.0
