@@ -5,11 +5,11 @@ import "hardhat/console.sol";
 
 error GreeterError();
 
-contract Greeter {
+contract GreeterV2 {
     string public greeting;
 
     function greet() public view returns (string memory) {
-        return greeting;
+        return string(abi.encodePacked(greeting, "!!!"));
     }
 
     function setGreeting(string memory _greeting) public {
