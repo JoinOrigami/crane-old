@@ -2,9 +2,9 @@ import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
 import type { GreeterV2 } from "../../src/types";
-import type { Greeter } from "../../src/types/Greeter";
-import type { GreeterV2__factory } from "../../src/types/factories/Greeter2.sol/GreeterV2__factory";
-import type { Greeter__factory } from "../../src/types/factories/Greeter__factory";
+import type { Greeter } from "../../src/types";
+import type { GreeterV2__factory } from "../../src/types";
+import type { Greeter__factory } from "../../src/types";
 
 task("deploy:Greeter")
   .addParam("greeting", "Say hello, be nice")
