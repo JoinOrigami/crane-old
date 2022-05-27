@@ -21,7 +21,7 @@ import type {
   OnEvent,
 } from "../common";
 
-export interface GreeterV2Interface extends utils.Interface {
+export interface GreeterInterface extends utils.Interface {
   functions: {
     "greet()": FunctionFragment;
     "greeting()": FunctionFragment;
@@ -52,12 +52,12 @@ export interface GreeterV2Interface extends utils.Interface {
   events: {};
 }
 
-export interface GreeterV2 extends BaseContract {
+export interface Greeter extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: GreeterV2Interface;
+  interface: GreeterInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

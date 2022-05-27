@@ -19,9 +19,9 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common";
+} from "../../common";
 
-export interface GreeterInterface extends utils.Interface {
+export interface GreeterV2Interface extends utils.Interface {
   functions: {
     "greet()": FunctionFragment;
     "greeting()": FunctionFragment;
@@ -52,12 +52,12 @@ export interface GreeterInterface extends utils.Interface {
   events: {};
 }
 
-export interface Greeter extends BaseContract {
+export interface GreeterV2 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: GreeterInterface;
+  interface: GreeterV2Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

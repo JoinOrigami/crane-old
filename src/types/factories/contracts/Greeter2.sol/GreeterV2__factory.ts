@@ -6,7 +6,7 @@ import type { Provider, TransactionRequest } from "@ethersproject/providers";
 import type {
   GreeterV2,
   GreeterV2Interface,
-} from "../../Greeter2.sol/GreeterV2";
+} from "../../../contracts/Greeter2.sol/GreeterV2";
 
 const _abi = [
   {
