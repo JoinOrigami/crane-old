@@ -26,7 +26,7 @@ import type {
   OnEvent,
 } from "../common";
 
-export interface GovernanceTokenFactoryInterface extends utils.Interface {
+export interface OrigamiGovernanceTokenInterface extends utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "MINTER_ROLE()": FunctionFragment;
@@ -389,12 +389,12 @@ export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
 
 export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
 
-export interface GovernanceTokenFactory extends BaseContract {
+export interface OrigamiGovernanceToken extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: GovernanceTokenFactoryInterface;
+  interface: OrigamiGovernanceTokenInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

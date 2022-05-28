@@ -3,5 +3,5 @@
 /* eslint-disable */
 import type * as greeter2Sol from "./Greeter2.sol";
 export type { greeter2Sol };
-export type { GovernanceTokenFactory } from "./GovernanceTokenFactory";
 export type { Greeter } from "./Greeter";
+export type { OrigamiGovernanceToken } from "./OrigamiGovernanceToken";

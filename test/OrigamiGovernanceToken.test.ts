@@ -3,11 +3,11 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers, upgrades } from "hardhat";
 
-import type { GovernanceTokenFactory } from "../src/types";
+import type { OrigamiGovernanceToken } from "../src/types";
 
 use(solidity);
 
-describe("Unit tests", function () {
+describe("GovernanceToken", function () {
   let signers: SignerWithAddress[];
   let admin: SignerWithAddress;
   let mintee: SignerWithAddress;
@@ -19,11 +19,11 @@ describe("Unit tests", function () {
   });
 
   describe("Limited Supply", function () {
-    let GTF: GovernanceTokenFactory;
+    let GTF: OrigamiGovernanceToken;
 
     beforeEach(async function () {
-      const GTF__factory = await ethers.getContractFactory("GovernanceTokenFactory");
-      GTF = <GovernanceTokenFactory>await upgrades.deployProxy(GTF__factory, ["Orange Token", "ORANGE", 10]);
+      const GTF__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+      GTF = <OrigamiGovernanceToken>await upgrades.deployProxy(GTF__factory, ["Orange Token", "ORANGE", 10]);
     });
 
     it("should revert mint when caller does not have proper role", async function () {
@@ -42,11 +42,11 @@ describe("Unit tests", function () {
   });
 
   describe("Burning Tokens", function () {
-    let GTF: GovernanceTokenFactory;
+    let GTF: OrigamiGovernanceToken;
 
     beforeEach(async function () {
-      const GTF__factory = await ethers.getContractFactory("GovernanceTokenFactory");
-      GTF = <GovernanceTokenFactory>await upgrades.deployProxy(GTF__factory, ["Orange Token", "ORANGE", 10]);
+      const GTF__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+      GTF = <OrigamiGovernanceToken>await upgrades.deployProxy(GTF__factory, ["Orange Token", "ORANGE", 10]);
     });
 
     it("reverts if non-admin tries to set enableBurn", async function () {
@@ -98,11 +98,11 @@ describe("Unit tests", function () {
   });
 
   describe("Pausing", function () {
-    let GTF: GovernanceTokenFactory;
+    let GTF: OrigamiGovernanceToken;
 
     beforeEach(async function () {
-      const GTF__factory = await ethers.getContractFactory("GovernanceTokenFactory");
-      GTF = <GovernanceTokenFactory>await upgrades.deployProxy(GTF__factory, ["Orange Token", "ORANGE", 10]);
+      const GTF__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+      GTF = <OrigamiGovernanceToken>await upgrades.deployProxy(GTF__factory, ["Orange Token", "ORANGE", 10]);
     });
 
     it("only allows PAUSER to set pause", async function () {
@@ -155,11 +155,11 @@ describe("Unit tests", function () {
   });
 
   describe("Transferrability", function () {
-    let GTF: GovernanceTokenFactory;
+    let GTF: OrigamiGovernanceToken;
 
     beforeEach(async function () {
-      const GTF__factory = await ethers.getContractFactory("GovernanceTokenFactory");
-      GTF = <GovernanceTokenFactory>await upgrades.deployProxy(GTF__factory, ["Orange Token", "ORANGE", 10]);
+      const GTF__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+      GTF = <OrigamiGovernanceToken>await upgrades.deployProxy(GTF__factory, ["Orange Token", "ORANGE", 10]);
     });
 
     it("only allows admin to set transferrable", async function () {

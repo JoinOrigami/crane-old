@@ -2,5 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as greeter2Sol from "./Greeter2.sol";
-export { GovernanceTokenFactory__factory } from "./GovernanceTokenFactory__factory";
 export { Greeter__factory } from "./Greeter__factory";
+export { OrigamiGovernanceToken__factory } from "./OrigamiGovernanceToken__factory";
