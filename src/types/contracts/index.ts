@@ -5,3 +5,4 @@ import type * as greeter2Sol from "./Greeter2.sol";
 export type { greeter2Sol };
 export type { Greeter } from "./Greeter";
 export type { OrigamiGovernanceToken } from "./OrigamiGovernanceToken";
+export type { OrigamiGovernanceTokenFactory } from "./OrigamiGovernanceTokenFactory";

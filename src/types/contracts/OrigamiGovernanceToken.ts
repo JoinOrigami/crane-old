@@ -498,7 +498,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
     initialize(
       _name: string,
       _symbol: string,
-      _totalSupply: BigNumberish,
+      _supplyCap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -639,7 +639,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
   initialize(
     _name: string,
     _symbol: string,
-    _totalSupply: BigNumberish,
+    _supplyCap: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -769,7 +769,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
     initialize(
       _name: string,
       _symbol: string,
-      _totalSupply: BigNumberish,
+      _supplyCap: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -976,7 +976,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
     initialize(
       _name: string,
       _symbol: string,
-      _totalSupply: BigNumberish,
+      _supplyCap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1126,7 +1126,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
     initialize(
       _name: string,
       _symbol: string,
-      _totalSupply: BigNumberish,
+      _supplyCap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

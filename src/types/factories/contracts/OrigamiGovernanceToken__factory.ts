@@ -505,7 +505,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "_totalSupply",
+        name: "_supplyCap",
         type: "uint256",
       },
     ],

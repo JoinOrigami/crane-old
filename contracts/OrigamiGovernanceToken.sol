@@ -30,13 +30,13 @@ contract OrigamiGovernanceToken is
     function initialize(
         string memory _name,
         string memory _symbol,
-        uint256 _totalSupply
+        uint256 _supplyCap
     ) public initializer {
         __ERC20_init(_name, _symbol);
         __ERC20Burnable_init();
         __Pausable_init();
         __AccessControl_init();
-        __ERC20Capped_init(_totalSupply);
+        __ERC20Capped_init(_supplyCap);
 
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(PAUSER_ROLE, msg.sender);

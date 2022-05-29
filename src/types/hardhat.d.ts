@@ -72,6 +72,10 @@ declare module "hardhat/types/runtime" {
       name: "OrigamiGovernanceToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OrigamiGovernanceToken__factory>;
+    getContractFactory(
+      name: "OrigamiGovernanceTokenFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OrigamiGovernanceTokenFactory__factory>;
 
     getContractAt(
       name: "AccessControlUpgradeable",
@@ -148,6 +152,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.OrigamiGovernanceToken>;
+    getContractAt(
+      name: "OrigamiGovernanceTokenFactory",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OrigamiGovernanceTokenFactory>;
 
     // default types
     getContractFactory(

@@ -4,3 +4,4 @@
 export * as greeter2Sol from "./Greeter2.sol";
 export { Greeter__factory } from "./Greeter__factory";
 export { OrigamiGovernanceToken__factory } from "./OrigamiGovernanceToken__factory";
+export { OrigamiGovernanceTokenFactory__factory } from "./OrigamiGovernanceTokenFactory__factory";

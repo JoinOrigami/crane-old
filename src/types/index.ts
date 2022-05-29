@@ -36,3 +36,5 @@ export type { GreeterV2 } from "./contracts/Greeter2.sol/GreeterV2";
 export { GreeterV2__factory } from "./factories/contracts/Greeter2.sol/GreeterV2__factory";
 export type { OrigamiGovernanceToken } from "./contracts/OrigamiGovernanceToken";
 export { OrigamiGovernanceToken__factory } from "./factories/contracts/OrigamiGovernanceToken__factory";
+export type { OrigamiGovernanceTokenFactory } from "./contracts/OrigamiGovernanceTokenFactory";
+export { OrigamiGovernanceTokenFactory__factory } from "./factories/contracts/OrigamiGovernanceTokenFactory__factory";
