@@ -30,10 +30,6 @@ export type { ERC165Upgradeable } from "./@openzeppelin/contracts-upgradeable/ut
 export { ERC165Upgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable__factory";
 export type { IERC165Upgradeable } from "./@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable";
 export { IERC165Upgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable__factory";
-export type { Greeter } from "./contracts/Greeter";
-export { Greeter__factory } from "./factories/contracts/Greeter__factory";
-export type { GreeterV2 } from "./contracts/Greeter2.sol/GreeterV2";
-export { GreeterV2__factory } from "./factories/contracts/Greeter2.sol/GreeterV2__factory";
 export type { OrigamiGovernanceToken } from "./contracts/OrigamiGovernanceToken";
 export { OrigamiGovernanceToken__factory } from "./factories/contracts/OrigamiGovernanceToken__factory";
 export type { OrigamiGovernanceTokenFactory } from "./contracts/OrigamiGovernanceTokenFactory";

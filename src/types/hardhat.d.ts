@@ -61,14 +61,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165Upgradeable__factory>;
     getContractFactory(
-      name: "Greeter",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Greeter__factory>;
-    getContractFactory(
-      name: "GreeterV2",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GreeterV2__factory>;
-    getContractFactory(
       name: "OrigamiGovernanceToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OrigamiGovernanceToken__factory>;
@@ -137,16 +129,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165Upgradeable>;
-    getContractAt(
-      name: "Greeter",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Greeter>;
-    getContractAt(
-      name: "GreeterV2",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.GreeterV2>;
     getContractAt(
       name: "OrigamiGovernanceToken",
       address: string,
