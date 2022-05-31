@@ -6,11 +6,11 @@ import "@openzeppelin/contracts-upgradeable/proxy/ClonesUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "./OrigamiGovernanceToken.sol";
+import "./OrigamiGovernanceTokenProxy.sol";
 
 /// @custom:security-contact contract-security@joinorigami.com
 contract OrigamiGovernanceTokenFactory is Initializable, AccessControlUpgradeable {
-    address private tokenImplementation;
-    address[] public clonedContracts;
+    address[] public proxiedContracts;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -19,10 +19,7 @@ contract OrigamiGovernanceTokenFactory is Initializable, AccessControlUpgradeabl
 
     function initialize() public initializer {
         __AccessControl_init();
-
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-
-        tokenImplementation = address(new OrigamiGovernanceToken());
     }
 
     function createOrigamiGovernanceToken(
@@ -30,18 +27,20 @@ contract OrigamiGovernanceTokenFactory is Initializable, AccessControlUpgradeabl
         string memory _symbol,
         uint256 _supplyCap
     ) public returns (address) {
-        address clone = ClonesUpgradeable.clone(tokenImplementation);
-        OrigamiGovernanceToken(clone).initialize(_name, _symbol, _supplyCap);
-        clonedContracts.push(clone);
-        return clone;
+        OrigamiGovernanceToken token = new OrigamiGovernanceToken();
+        bytes memory data = abi.encodeWithSelector(
+            OrigamiGovernanceToken(address(0)).initialize.selector,
+            _name,
+            _symbol,
+            _supplyCap
+        );
+        OrigamiGovernanceTokenProxy proxy = new OrigamiGovernanceTokenProxy(address(token), msg.sender, data);
+        proxiedContracts.push(address(proxy));
+        return address(proxy);
     }
 
-    function getClonedContractAddress(uint256 index) public view onlyRole(DEFAULT_ADMIN_ROLE) returns (address) {
-        require(index < clonedContracts.length, "Index out of bounds");
-        return clonedContracts[index];
-    }
-
-    function getImplementationAddress() public view onlyRole(DEFAULT_ADMIN_ROLE) returns (address) {
-        return tokenImplementation;
+    function getProxyContractAddress(uint256 index) public view onlyRole(DEFAULT_ADMIN_ROLE) returns (address) {
+        require(index < proxiedContracts.length, "Index out of bounds");
+        return proxiedContracts[index];
     }
 }
