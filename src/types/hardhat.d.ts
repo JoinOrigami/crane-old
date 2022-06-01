@@ -49,6 +49,38 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20Upgradeable__factory>;
     getContractFactory(
+      name: "ERC721Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721Upgradeable__factory>;
+    getContractFactory(
+      name: "ERC721BurnableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721BurnableUpgradeable__factory>;
+    getContractFactory(
+      name: "ERC721EnumerableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721EnumerableUpgradeable__factory>;
+    getContractFactory(
+      name: "ERC721URIStorageUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721URIStorageUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC721EnumerableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721EnumerableUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC721MetadataUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721MetadataUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC721ReceiverUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721ReceiverUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC721Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Upgradeable__factory>;
+    getContractFactory(
       name: "ContextUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ContextUpgradeable__factory>;
@@ -92,6 +124,10 @@ declare module "hardhat/types/runtime" {
       name: "OrigamiGovernanceTokenFactory",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OrigamiGovernanceTokenFactory__factory>;
+    getContractFactory(
+      name: "OrigamiMembershipToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OrigamiMembershipToken__factory>;
     getContractFactory(
       name: "OrigamiGovernanceTokenTestVersion",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -142,6 +178,46 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20Upgradeable>;
+    getContractAt(
+      name: "ERC721Upgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721Upgradeable>;
+    getContractAt(
+      name: "ERC721BurnableUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721BurnableUpgradeable>;
+    getContractAt(
+      name: "ERC721EnumerableUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721EnumerableUpgradeable>;
+    getContractAt(
+      name: "ERC721URIStorageUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721URIStorageUpgradeable>;
+    getContractAt(
+      name: "IERC721EnumerableUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721EnumerableUpgradeable>;
+    getContractAt(
+      name: "IERC721MetadataUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721MetadataUpgradeable>;
+    getContractAt(
+      name: "IERC721ReceiverUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721ReceiverUpgradeable>;
+    getContractAt(
+      name: "IERC721Upgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721Upgradeable>;
     getContractAt(
       name: "ContextUpgradeable",
       address: string,
@@ -197,6 +273,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.OrigamiGovernanceTokenFactory>;
+    getContractAt(
+      name: "OrigamiMembershipToken",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OrigamiMembershipToken>;
     getContractAt(
       name: "OrigamiGovernanceTokenTestVersion",
       address: string,
