@@ -96,6 +96,15 @@ describe("OrigamiGovernanceTokenFactory", function () {
       OkC = <OrigamiGovernanceTokenTestVersion>await OGTTV__factory.attach(OkCAddress);
     });
 
+    it("reverts when you try to access a proxy that does not exist", async function () {
+      expect(await OGTF.getProxyContractAddress(0)).to.equal(KidA.address);
+      await expect(OGTF.getProxyContractAddress(2)).to.be.reverted;
+    });
+
+    it("reverts when a non-admin attempts to retrieve proxy addresses", async function () {
+      await expect(OGTF.connect(mintee).getProxyContractAddress(0)).to.be.reverted;
+    });
+
     it("has access to the old functions", async function () {
       expect(await KidA.connect(mintee).name()).to.equal("Kid A");
       expect(await KidA.connect(mintee).cap()).to.equal(10);

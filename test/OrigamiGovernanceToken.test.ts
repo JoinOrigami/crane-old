@@ -74,6 +74,11 @@ describe("GovernanceToken", function () {
       await expect(GTF.connect(admin).burn(1)).to.be.revertedWith("Burnable: burning is disabled");
     });
 
+    it("prevents calling enableBurn when already enabled", async function () {
+      await GTF.connect(admin).enableBurn();
+      await expect(GTF.connect(admin).enableBurn()).to.be.revertedWith("Burnable: burning is enabled");
+    });
+
     it("allows burning when enabled", async function () {
       await GTF.connect(admin).mint(admin.address, 2);
       await GTF.connect(admin).enableBurn();
@@ -175,6 +180,11 @@ describe("GovernanceToken", function () {
       await expect(GTF.connect(mintee).disableTransfer()).to.be.revertedWith("AccessControl");
       await GTF.connect(admin).disableTransfer();
       expect(await GTF.transferrable()).to.be.false;
+    });
+
+    it("prevents calling enableTransfer when already enabled", async function () {
+      await GTF.connect(admin).enableTransfer();
+      await expect(GTF.connect(admin).enableTransfer()).to.be.revertedWith("Transferrable: transfers are enabled");
     });
 
     it("allows mint when transfer is disabled", async function () {
