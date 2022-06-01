@@ -71,6 +71,7 @@ contract OrigamiMembershipToken is
     }
 
     function safeMint(address to, string memory uri) public onlyRole(MINTER_ROLE) {
+        require(balanceOf(to) == 0, "Mint limit exceeded");
         _tokenIdCounter.increment();
         uint256 tokenId = _tokenIdCounter.current();
         _safeMint(to, tokenId);

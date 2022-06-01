@@ -38,6 +38,11 @@ describe("MembershipToken", function () {
       expect(await OM.ownerOf(1)).to.be.eq(mintee.address);
       expect(await OM.tokenURI(1)).to.be.eq("https://ipfs.io/foo");
     });
+
+    it("limits minting to one NFT per address", async function () {
+      await OM.safeMint(mintee.address, "foo");
+      await expect(OM.safeMint(mintee.address, "bar")).to.be.revertedWith("Mint limit exceeded");
+    });
   });
 
   describe("metadata", function () {
