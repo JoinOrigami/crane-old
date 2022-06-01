@@ -9,13 +9,17 @@ use(solidity);
 
 describe("MembershipToken", function () {
   let signers: SignerWithAddress[];
-  let admin: SignerWithAddress;
+  // let admin: SignerWithAddress;
   let mintee: SignerWithAddress;
+  let mintee2: SignerWithAddress;
+  let minter: SignerWithAddress;
 
   before(async function () {
     signers = await ethers.getSigners();
-    admin = signers[0];
+    // admin = signers[0];
     mintee = signers[1];
+    mintee2 = signers[2];
+    minter = signers[3];
   });
 
   describe("minting", function () {
@@ -98,6 +102,53 @@ describe("MembershipToken", function () {
     it("prevents minting when paused", async function () {
       await OM.pause();
       await expect(OM.safeMint(mintee.address, "foo")).to.be.revertedWith("Pausable: paused");
+    });
+  });
+
+  describe("transferrability", function () {
+    let OM: OrigamiMembershipToken;
+
+    beforeEach(async function () {
+      const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
+      OM = <OrigamiMembershipToken>(
+        await upgrades.deployProxy(OM__factory, ["Deciduous Tree DAO Membership", "DTM", "https://ipfs.io/"])
+      );
+      await OM.grantRole(await OM.MINTER_ROLE(), minter.address);
+    });
+
+    it("allows minter to transfer (aka mint) when nontransferrable", async function () {
+      expect(await OM.transferrable()).to.be.eq(false);
+      // admin has minter role
+      await OM.safeMint(mintee.address, "foo");
+      expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
+      // minter has minter role too
+      await OM.connect(minter).safeMint(mintee2.address, "foo");
+      expect(await OM.balanceOf(mintee2.address)).to.be.eq(1);
+    });
+
+    it("prevents token transfers when disabled", async function () {
+      await OM.safeMint(mintee.address, "foo");
+      await expect(OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1)).to.be.revertedWith(
+        "Transferrable: transfers are disabled",
+      );
+    });
+
+    it("allows token transfers when enabled", async function () {
+      await OM.safeMint(mintee.address, "foo");
+      await OM.enableTransfer();
+      await OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1);
+      expect(await OM.balanceOf(mintee2.address)).to.be.eq(1);
+    });
+
+    it("prevents enabling transfers when they're already enabled", async function () {
+      await OM.enableTransfer();
+      await expect(OM.enableTransfer()).to.be.revertedWith("Transferrable: transfers are enabled");
+    });
+
+    it("allows disabling transfers after they've been enabled", async function () {
+      await OM.enableTransfer();
+      await OM.disableTransfer();
+      expect(await OM.transferrable()).to.be.false;
     });
   });
 });

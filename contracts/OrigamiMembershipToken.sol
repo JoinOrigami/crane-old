@@ -26,6 +26,7 @@ contract OrigamiMembershipToken is
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     CountersUpgradeable.Counter private _tokenIdCounter;
     string public _metadataBaseURI;
+    bool private _transferEnabled;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -49,6 +50,8 @@ contract OrigamiMembershipToken is
         _grantRole(MINTER_ROLE, msg.sender);
 
         setBaseURI(baseURI_);
+
+        _transferEnabled = false;
     }
 
     function _baseURI() internal view override returns (string memory) {
@@ -74,11 +77,23 @@ contract OrigamiMembershipToken is
         _setTokenURI(tokenId, uri);
     }
 
+    function transferrable() public view returns (bool) {
+        return _transferEnabled;
+    }
+
+    function enableTransfer() public onlyRole(DEFAULT_ADMIN_ROLE) whenNontransferrable {
+        _transferEnabled = true;
+    }
+
+    function disableTransfer() public onlyRole(DEFAULT_ADMIN_ROLE) whenTransferrable {
+        _transferEnabled = false;
+    }
+
     function _beforeTokenTransfer(
         address from,
         address to,
         uint256 tokenId
-    ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) whenNotPaused {
+    ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) whenNotPaused whenTransferrable {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
@@ -105,5 +120,15 @@ contract OrigamiMembershipToken is
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    modifier whenNontransferrable() {
+        require(!transferrable(), "Transferrable: transfers are enabled");
+        _;
+    }
+
+    modifier whenTransferrable() {
+        require(transferrable() || hasRole(MINTER_ROLE, _msgSender()), "Transferrable: transfers are disabled");
+        _;
     }
 }
