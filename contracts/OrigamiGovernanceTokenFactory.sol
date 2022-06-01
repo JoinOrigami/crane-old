@@ -4,13 +4,14 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/ClonesUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
 import "./OrigamiGovernanceToken.sol";
-import "./OrigamiGovernanceTokenProxy.sol";
 
 /// @custom:security-contact contract-security@joinorigami.com
 contract OrigamiGovernanceTokenFactory is Initializable, AccessControlUpgradeable {
     address[] public proxiedContracts;
+    address private tokenImplementation;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -20,27 +21,28 @@ contract OrigamiGovernanceTokenFactory is Initializable, AccessControlUpgradeabl
     function initialize() public initializer {
         __AccessControl_init();
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        tokenImplementation = address(new OrigamiGovernanceToken());
     }
 
     function createOrigamiGovernanceToken(
         string memory _name,
         string memory _symbol,
         uint256 _supplyCap
-    ) public returns (address) {
-        OrigamiGovernanceToken token = new OrigamiGovernanceToken();
+    ) public onlyRole(DEFAULT_ADMIN_ROLE) returns (address) {
+        address clone = ClonesUpgradeable.clone(tokenImplementation);
         bytes memory data = abi.encodeWithSelector(
-            OrigamiGovernanceToken(address(0)).initialize.selector,
+            OrigamiGovernanceToken(clone).initialize.selector,
             _name,
             _symbol,
             _supplyCap
         );
-        OrigamiGovernanceTokenProxy proxy = new OrigamiGovernanceTokenProxy(address(token), msg.sender, data);
+        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(clone, _msgSender(), data);
         proxiedContracts.push(address(proxy));
         return address(proxy);
     }
 
-    function getProxyContractAddress(uint256 index) public view onlyRole(DEFAULT_ADMIN_ROLE) returns (address) {
+    function getProxyContractAddress(uint256 index) public view onlyRole(DEFAULT_ADMIN_ROLE) returns (address payable) {
         require(index < proxiedContracts.length, "Index out of bounds");
-        return proxiedContracts[index];
+        return payable(proxiedContracts[index]);
     }
 }

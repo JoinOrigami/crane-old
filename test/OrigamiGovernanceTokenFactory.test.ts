@@ -3,8 +3,13 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers, upgrades } from "hardhat";
 
-import type { OrigamiGovernanceToken } from "../src/types";
-import type { OrigamiGovernanceTokenFactory } from "../src/types";
+import type { TransparentUpgradeableProxy, TransparentUpgradeableProxy__factory } from "../src/types";
+import type {
+  OrigamiGovernanceToken,
+  OrigamiGovernanceTokenFactory,
+  OrigamiGovernanceTokenTestVersion,
+  OrigamiGovernanceTokenTestVersion__factory,
+} from "../src/types";
 
 use(solidity);
 
@@ -58,6 +63,55 @@ describe("OrigamiGovernanceTokenFactory", function () {
   });
 
   describe("Upgrading the implementation for clones", function () {
-    it("reflects changes in the upgraded contract");
+    let OGTF: OrigamiGovernanceTokenFactory;
+    let KidA: OrigamiGovernanceTokenTestVersion;
+    let OkC: OrigamiGovernanceTokenTestVersion;
+    let OGTTV: OrigamiGovernanceTokenTestVersion;
+    let OGTTV__factory: OrigamiGovernanceTokenTestVersion__factory;
+    let TokenProxy__factory: TransparentUpgradeableProxy__factory;
+
+    before(async function () {
+      const OGTF__factory = await ethers.getContractFactory("OrigamiGovernanceTokenFactory");
+      TokenProxy__factory = await ethers.getContractFactory("TransparentUpgradeableProxy");
+      OGTTV__factory = await ethers.getContractFactory("OrigamiGovernanceTokenTestVersion");
+
+      OGTF = <OrigamiGovernanceTokenFactory>await upgrades.deployProxy(OGTF__factory, []);
+      const KidAtx = await OGTF.createOrigamiGovernanceToken("Kid A", "KIDA", 10);
+      await KidAtx.wait();
+      const KidAAddress = await OGTF.getProxyContractAddress(0);
+
+      OGTTV = await OGTTV__factory.deploy();
+
+      // this only upgrades this specific proxy's implementation
+      const tokenProxy = <TransparentUpgradeableProxy>TokenProxy__factory.attach(KidAAddress);
+      await tokenProxy.upgradeTo(OGTTV.address);
+
+      KidA = <OrigamiGovernanceTokenTestVersion>await OGTTV__factory.attach(KidAAddress);
+
+      // this still generates proxies with the old implementation, since the factory hasn't been upgraded
+      const OkCtx = await OGTF.createOrigamiGovernanceToken("Okay Computer", "OKC", 10);
+      await OkCtx.wait();
+      const OkCAddress = await OGTF.getProxyContractAddress(1);
+
+      OkC = <OrigamiGovernanceTokenTestVersion>await OGTTV__factory.attach(OkCAddress);
+    });
+
+    it("has access to the old functions", async function () {
+      expect(await KidA.connect(mintee).name()).to.equal("Kid A");
+      expect(await KidA.connect(mintee).cap()).to.equal(10);
+    });
+
+    it("reflects changes in the upgraded contract", async function () {
+      expect(await KidA.connect(mintee).isFromUpgrade()).to.be.true;
+    });
+
+    it("new factory instances of the proxy have to be upgraded independently", async function () {
+      expect(await OkC.connect(mintee).name()).to.equal("Okay Computer");
+      await expect(OkC.connect(mintee).isFromUpgrade()).to.be.reverted;
+
+      const okcProxy = <TransparentUpgradeableProxy>TokenProxy__factory.attach(OkC.address);
+      await okcProxy.upgradeTo(OGTTV.address);
+      expect(await OkC.connect(mintee).isFromUpgrade()).to.be.true;
+    });
   });
 });
