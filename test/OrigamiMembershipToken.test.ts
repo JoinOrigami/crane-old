@@ -46,7 +46,7 @@ describe("MembershipToken", function () {
 
     it("limits minting to one NFT per address", async function () {
       await OM.connect(owner).safeMint(mintee.address);
-      await expect(OM.connect(owner).safeMint(mintee.address)).to.be.revertedWith("Mint limit exceeded");
+      await expect(OM.connect(owner).safeMint(mintee.address)).to.be.revertedWith("Holders may only have one token");
     });
   });
 
@@ -158,13 +158,41 @@ describe("MembershipToken", function () {
       await expect(OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1)).to.be.revertedWith(
         "Transferrable: transfers are disabled",
       );
+      await expect(
+        OM.connect(mintee)["safeTransferFrom(address,address,uint256)"](mintee.address, mintee2.address, 1),
+      ).to.be.revertedWith("Transferrable: transfers are disabled");
+      await expect(
+        OM.connect(mintee)["safeTransferFrom(address,address,uint256,bytes)"](mintee.address, mintee2.address, 1, "0x"),
+      ).to.be.revertedWith("Transferrable: transfers are disabled");
+    });
+
+    it("prevents a single address from being transferred more than one token", async function () {
+      await OM.connect(minter).safeMint(mintee.address);
+      await OM.connect(minter).safeMint(mintee2.address);
+      await OM.connect(owner).enableTransfer();
+      await expect(OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1)).to.be.revertedWith(
+        "Holders may only have one token",
+      );
     });
 
     it("allows token transfers when enabled", async function () {
-      await OM.connect(owner).safeMint(mintee.address);
       await OM.connect(owner).enableTransfer();
+      await OM.connect(owner).safeMint(mintee.address);
       await OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1);
       expect(await OM.balanceOf(mintee2.address)).to.be.eq(1);
+
+      await OM.connect(mintee2)["safeTransferFrom(address,address,uint256)"](mintee2.address, mintee.address, 1);
+      expect(await OM.balanceOf(mintee2.address)).to.be.eq(0);
+      expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
+
+      await OM.connect(mintee)["safeTransferFrom(address,address,uint256,bytes)"](
+        mintee.address,
+        mintee2.address,
+        1,
+        "0x",
+      );
+      expect(await OM.balanceOf(mintee2.address)).to.be.eq(1);
+      expect(await OM.balanceOf(mintee.address)).to.be.eq(0);
     });
 
     it("only allows the owner to transfer when transferrable", async function () {
@@ -209,6 +237,10 @@ describe("MembershipToken", function () {
       await OM.connect(owner).safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       // admin is a revoker
+      await OM.connect(owner).revoke(mintee.address);
+      expect(await OM.balanceOf(mintee.address)).to.be.eq(0);
+      // can burn more than once (limitBalance modifier doesn't apply)
+      await OM.connect(owner).safeMint(mintee.address);
       await OM.connect(owner).revoke(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(0);
     });

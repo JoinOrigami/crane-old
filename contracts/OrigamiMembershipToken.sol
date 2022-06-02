@@ -80,7 +80,6 @@ contract OrigamiMembershipToken is
     }
 
     function safeMint(address to) public onlyRole(MINTER_ROLE) {
-        require(balanceOf(to) == 0, "Mint limit exceeded");
         _tokenIdCounter.increment();
         uint256 tokenId = _tokenIdCounter.current();
         _safeMint(to, tokenId);
@@ -133,7 +132,7 @@ contract OrigamiMembershipToken is
         address from,
         address to,
         uint256 tokenId
-    ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) whenNotPaused {
+    ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) limitBalance(to) whenNotPaused {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
@@ -156,6 +155,12 @@ contract OrigamiMembershipToken is
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    modifier limitBalance(address recipient) {
+        // allow unlimited transfers to the burn address
+        require(recipient == address(0) || balanceOf(recipient) == 0, "Holders may only have one token");
+        _;
     }
 
     modifier whenNontransferrable() {
