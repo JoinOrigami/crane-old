@@ -20,11 +20,12 @@ contract OrigamiGovernanceTokenFactory is Initializable, AccessControlUpgradeabl
 
     function initialize() public initializer {
         __AccessControl_init();
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
         tokenImplementation = address(new OrigamiGovernanceToken());
     }
 
     function createOrigamiGovernanceToken(
+        address _admin,
         string memory _name,
         string memory _symbol,
         uint256 _supplyCap
@@ -32,6 +33,7 @@ contract OrigamiGovernanceTokenFactory is Initializable, AccessControlUpgradeabl
         address clone = ClonesUpgradeable.clone(tokenImplementation);
         bytes memory data = abi.encodeWithSelector(
             OrigamiGovernanceToken(clone).initialize.selector,
+            _admin,
             _name,
             _symbol,
             _supplyCap

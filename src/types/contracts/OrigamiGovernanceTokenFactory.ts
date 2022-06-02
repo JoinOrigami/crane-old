@@ -30,7 +30,7 @@ export interface OrigamiGovernanceTokenFactoryInterface
   extends utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
-    "createOrigamiGovernanceToken(string,string,uint256)": FunctionFragment;
+    "createOrigamiGovernanceToken(address,string,string,uint256)": FunctionFragment;
     "getProxyContractAddress(uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
@@ -63,7 +63,7 @@ export interface OrigamiGovernanceTokenFactoryInterface
   ): string;
   encodeFunctionData(
     functionFragment: "createOrigamiGovernanceToken",
-    values: [string, string, BigNumberish]
+    values: [string, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getProxyContractAddress",
@@ -222,6 +222,7 @@ export interface OrigamiGovernanceTokenFactory extends BaseContract {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     createOrigamiGovernanceToken(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -277,6 +278,7 @@ export interface OrigamiGovernanceTokenFactory extends BaseContract {
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
   createOrigamiGovernanceToken(
+    _admin: string,
     _name: string,
     _symbol: string,
     _supplyCap: BigNumberish,
@@ -332,6 +334,7 @@ export interface OrigamiGovernanceTokenFactory extends BaseContract {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
     createOrigamiGovernanceToken(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -424,6 +427,7 @@ export interface OrigamiGovernanceTokenFactory extends BaseContract {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     createOrigamiGovernanceToken(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -485,6 +489,7 @@ export interface OrigamiGovernanceTokenFactory extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createOrigamiGovernanceToken(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,

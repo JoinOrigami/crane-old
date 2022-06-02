@@ -47,7 +47,7 @@ contract OrigamiMembershipToken is
         __AccessControl_init();
         __ERC721Burnable_init();
 
-        // Temporarily grant admin to caller so it grant the following roles.
+        // Temporarily grant admin to caller so it can grant the following roles.
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
         // grant all roles to the admin

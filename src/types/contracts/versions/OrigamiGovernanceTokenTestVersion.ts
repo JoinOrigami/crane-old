@@ -49,7 +49,7 @@ export interface OrigamiGovernanceTokenTestVersionInterface
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize(string,string,uint256)": FunctionFragment;
+    "initialize(address,string,string,uint256)": FunctionFragment;
     "isFromUpgrade()": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
@@ -172,7 +172,7 @@ export interface OrigamiGovernanceTokenTestVersionInterface
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, BigNumberish]
+    values: [string, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isFromUpgrade",
@@ -507,6 +507,7 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
     ): Promise<ContractTransaction>;
 
     initialize(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -650,6 +651,7 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
   ): Promise<ContractTransaction>;
 
   initialize(
+    _admin: string,
     _name: string,
     _symbol: string,
     _supplyCap: BigNumberish,
@@ -782,6 +784,7 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
     ): Promise<boolean>;
 
     initialize(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -991,6 +994,7 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
     ): Promise<BigNumber>;
 
     initialize(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -1143,6 +1147,7 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,

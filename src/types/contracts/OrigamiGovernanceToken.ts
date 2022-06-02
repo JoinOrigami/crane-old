@@ -48,7 +48,7 @@ export interface OrigamiGovernanceTokenInterface extends utils.Interface {
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize(string,string,uint256)": FunctionFragment;
+    "initialize(address,string,string,uint256)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "pause()": FunctionFragment;
@@ -169,7 +169,7 @@ export interface OrigamiGovernanceTokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, BigNumberish]
+    values: [string, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "mint",
@@ -496,6 +496,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
     ): Promise<ContractTransaction>;
 
     initialize(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -637,6 +638,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
   ): Promise<ContractTransaction>;
 
   initialize(
+    _admin: string,
     _name: string,
     _symbol: string,
     _supplyCap: BigNumberish,
@@ -767,6 +769,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
     ): Promise<boolean>;
 
     initialize(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -974,6 +977,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
     ): Promise<BigNumber>;
 
     initialize(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,
@@ -1124,6 +1128,7 @@ export interface OrigamiGovernanceToken extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
+      _admin: string,
       _name: string,
       _symbol: string,
       _supplyCap: BigNumberish,

@@ -28,6 +28,7 @@ contract OrigamiGovernanceToken is
     }
 
     function initialize(
+        address _admin,
         string memory _name,
         string memory _symbol,
         uint256 _supplyCap
@@ -38,15 +39,22 @@ contract OrigamiGovernanceToken is
         __AccessControl_init();
         __ERC20Capped_init(_supplyCap);
 
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(PAUSER_ROLE, msg.sender);
-        _grantRole(MINTER_ROLE, msg.sender);
+        // Temporarily grant admin to caller so it can grant the following roles.
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+
+        // grant all roles to the admin
+        _grantRole(DEFAULT_ADMIN_ROLE, _admin);
+        _grantRole(PAUSER_ROLE, _admin);
+        _grantRole(MINTER_ROLE, _admin);
+
+        // revoke admin grant for caller
+        _revokeRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
         _burnEnabled = false;
         _transferEnabled = false;
     }
 
-    function burnable() public view onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
+    function burnable() public view returns (bool) {
         return _burnEnabled;
     }
 
@@ -82,11 +90,23 @@ contract OrigamiGovernanceToken is
         _mint(to, amount);
     }
 
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) public virtual override whenTransferrable returns (bool) {
+        return super.transferFrom(from, to, amount);
+    }
+
+    function transfer(address to, uint256 amount) public virtual override whenTransferrable returns (bool) {
+        return super.transfer(to, amount);
+    }
+
     function _beforeTokenTransfer(
         address from,
         address to,
         uint256 amount
-    ) internal override whenNotPaused whenTransferrable {
+    ) internal override whenNotPaused {
         super._beforeTokenTransfer(from, to, amount);
     }
 
@@ -124,7 +144,7 @@ contract OrigamiGovernanceToken is
     }
 
     modifier whenTransferrable() {
-        require(transferrable() || hasRole(MINTER_ROLE, _msgSender()), "Transferrable: transfers are disabled");
+        require(transferrable(), "Transferrable: transfers are disabled");
         _;
     }
 }

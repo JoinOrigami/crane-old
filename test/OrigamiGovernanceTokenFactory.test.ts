@@ -16,12 +16,14 @@ use(solidity);
 describe("OrigamiGovernanceTokenFactory", function () {
   let signers: SignerWithAddress[];
   let admin: SignerWithAddress;
+  let owner: SignerWithAddress;
   let mintee: SignerWithAddress;
 
   before(async function () {
     signers = await ethers.getSigners();
     admin = signers[0];
-    mintee = signers[1];
+    owner = signers[1];
+    mintee = signers[2];
   });
 
   describe("Deploying", function () {
@@ -33,11 +35,11 @@ describe("OrigamiGovernanceTokenFactory", function () {
       const OGTF__factory = await ethers.getContractFactory("OrigamiGovernanceTokenFactory");
       const OGT__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
       OGTF = <OrigamiGovernanceTokenFactory>await upgrades.deployProxy(OGTF__factory, []);
-      const KidAtx = await OGTF.createOrigamiGovernanceToken("Kid A", "KIDA", 10);
+      const KidAtx = await OGTF.createOrigamiGovernanceToken(owner.address, "Kid A", "KIDA", 10);
       await KidAtx.wait();
       const KidAAddress = await OGTF.getProxyContractAddress(0);
       KidA = <OrigamiGovernanceToken>await OGT__factory.attach(KidAAddress as string);
-      const OkCtx = await OGTF.createOrigamiGovernanceToken("Okay Computer", "OKC", 100);
+      const OkCtx = await OGTF.createOrigamiGovernanceToken(owner.address, "Okay Computer", "OKC", 100);
       await OkCtx.wait();
       const OkCAddress = await OGTF.getProxyContractAddress(1);
       OkC = <OrigamiGovernanceToken>await OGT__factory.attach(OkCAddress as string);
@@ -62,6 +64,31 @@ describe("OrigamiGovernanceTokenFactory", function () {
     });
   });
 
+  describe("AccessControl for deployed instances", function () {
+    let OGF: OrigamiGovernanceTokenFactory;
+    let kidA: OrigamiGovernanceToken;
+    let minter: SignerWithAddress;
+
+    beforeEach(async function () {
+      minter = signers[3];
+
+      const OMF__factory = await ethers.getContractFactory("OrigamiGovernanceTokenFactory");
+      const OMT__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+      OGF = <OrigamiGovernanceTokenFactory>await upgrades.deployProxy(OMF__factory, []);
+
+      const kidATx = await OGF.createOrigamiGovernanceToken(owner.address, "Kid A", "KIDA", 1000);
+      await kidATx.wait();
+      const kidAaddress = await OGF.getProxyContractAddress(0);
+      kidA = <OrigamiGovernanceToken>await OMT__factory.attach(kidAaddress as string);
+    });
+
+    it("allows admin to grant roles", async function () {
+      const minterRole = await kidA.connect(mintee).MINTER_ROLE();
+      await kidA.connect(owner).grantRole(minterRole, minter.address);
+      expect(await kidA.connect(owner).hasRole(minterRole, minter.address)).to.be.true;
+    });
+  });
+
   describe("Upgrading the implementation for clones", function () {
     let OGTF: OrigamiGovernanceTokenFactory;
     let KidA: OrigamiGovernanceTokenTestVersion;
@@ -76,7 +103,7 @@ describe("OrigamiGovernanceTokenFactory", function () {
       OGTTV__factory = await ethers.getContractFactory("OrigamiGovernanceTokenTestVersion");
 
       OGTF = <OrigamiGovernanceTokenFactory>await upgrades.deployProxy(OGTF__factory, []);
-      const KidAtx = await OGTF.createOrigamiGovernanceToken("Kid A", "KIDA", 10);
+      const KidAtx = await OGTF.createOrigamiGovernanceToken(owner.address, "Kid A", "KIDA", 10);
       await KidAtx.wait();
       const KidAAddress = await OGTF.getProxyContractAddress(0);
 
@@ -89,7 +116,7 @@ describe("OrigamiGovernanceTokenFactory", function () {
       KidA = <OrigamiGovernanceTokenTestVersion>await OGTTV__factory.attach(KidAAddress);
 
       // this still generates proxies with the old implementation, since the factory hasn't been upgraded
-      const OkCtx = await OGTF.createOrigamiGovernanceToken("Okay Computer", "OKC", 10);
+      const OkCtx = await OGTF.createOrigamiGovernanceToken(owner.address, "Okay Computer", "OKC", 10);
       await OkCtx.wait();
       const OkCAddress = await OGTF.getProxyContractAddress(1);
 

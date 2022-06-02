@@ -31,8 +31,13 @@ contract OrigamiMembershipTokenFactory is Initializable, AccessControlUpgradeabl
         string memory baseURI_
     ) public onlyRole(DEFAULT_ADMIN_ROLE) returns (address) {
         address clone = ClonesUpgradeable.clone(tokenImplementation);
-        OrigamiMembershipToken token = OrigamiMembershipToken(clone);
-        bytes memory data = abi.encodeWithSelector(token.initialize.selector, _admin, _name, _symbol, baseURI_);
+        bytes memory data = abi.encodeWithSelector(
+            OrigamiMembershipToken(clone).initialize.selector,
+            _admin,
+            _name,
+            _symbol,
+            baseURI_
+        );
         TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(clone, _msgSender(), data);
         proxiedContracts.push(address(proxy));
         return address(proxy);
