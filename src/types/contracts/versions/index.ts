@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { OrigamiGovernanceTokenTestVersion } from "./OrigamiGovernanceTokenTestVersion";
+export type { OrigamiMembershipTokenTestVersion } from "./OrigamiMembershipTokenTestVersion";

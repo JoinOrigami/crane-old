@@ -30,8 +30,6 @@ export type { ERC721BurnableUpgradeable } from "./@openzeppelin/contracts-upgrad
 export { ERC721BurnableUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable__factory";
 export type { ERC721EnumerableUpgradeable } from "./@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable";
 export { ERC721EnumerableUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable__factory";
-export type { ERC721URIStorageUpgradeable } from "./@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable";
-export { ERC721URIStorageUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable__factory";
 export type { IERC721EnumerableUpgradeable } from "./@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721EnumerableUpgradeable";
 export { IERC721EnumerableUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721EnumerableUpgradeable__factory";
 export type { IERC721MetadataUpgradeable } from "./@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable";
@@ -64,5 +62,9 @@ export type { OrigamiGovernanceTokenFactory } from "./contracts/OrigamiGovernanc
 export { OrigamiGovernanceTokenFactory__factory } from "./factories/contracts/OrigamiGovernanceTokenFactory__factory";
 export type { OrigamiMembershipToken } from "./contracts/OrigamiMembershipToken";
 export { OrigamiMembershipToken__factory } from "./factories/contracts/OrigamiMembershipToken__factory";
+export type { OrigamiMembershipTokenFactory } from "./contracts/OrigamiMembershipTokenFactory";
+export { OrigamiMembershipTokenFactory__factory } from "./factories/contracts/OrigamiMembershipTokenFactory__factory";
 export type { OrigamiGovernanceTokenTestVersion } from "./contracts/versions/OrigamiGovernanceTokenTestVersion";
 export { OrigamiGovernanceTokenTestVersion__factory } from "./factories/contracts/versions/OrigamiGovernanceTokenTestVersion__factory";
+export type { OrigamiMembershipTokenTestVersion } from "./contracts/versions/OrigamiMembershipTokenTestVersion";
+export { OrigamiMembershipTokenTestVersion__factory } from "./factories/contracts/versions/OrigamiMembershipTokenTestVersion__factory";

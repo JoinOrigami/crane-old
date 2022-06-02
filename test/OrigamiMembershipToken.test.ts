@@ -7,17 +7,19 @@ import type { OrigamiMembershipToken } from "../src/types";
 
 use(solidity);
 
-describe.only("MembershipToken", function () {
+describe("MembershipToken", function () {
   let signers: SignerWithAddress[];
   // let admin: SignerWithAddress;
+  let owner: SignerWithAddress;
   let mintee: SignerWithAddress;
   let mintee2: SignerWithAddress;
 
   before(async function () {
     signers = await ethers.getSigners();
     // admin = signers[0];
-    mintee = signers[1];
-    mintee2 = signers[2];
+    owner = signers[1];
+    mintee = signers[2];
+    mintee2 = signers[3];
   });
 
   describe("minting", function () {
@@ -26,20 +28,25 @@ describe.only("MembershipToken", function () {
     beforeEach(async function () {
       const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
       OM = <OrigamiMembershipToken>(
-        await upgrades.deployProxy(OM__factory, ["Deciduous Tree DAO Membership", "DTM", "https://ipfs.io/"])
+        await upgrades.deployProxy(OM__factory, [
+          owner.address,
+          "Deciduous Tree DAO Membership",
+          "DTM",
+          "https://ipfs.io/",
+        ])
       );
     });
 
     it("mints membership NFTs", async function () {
-      await OM.safeMint(mintee.address);
+      await OM.connect(owner).safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       expect(await OM.ownerOf(1)).to.be.eq(mintee.address);
       expect(await OM.tokenURI(1)).to.be.eq("https://ipfs.io/1");
     });
 
     it("limits minting to one NFT per address", async function () {
-      await OM.safeMint(mintee.address);
-      await expect(OM.safeMint(mintee.address)).to.be.revertedWith("Mint limit exceeded");
+      await OM.connect(owner).safeMint(mintee.address);
+      await expect(OM.connect(owner).safeMint(mintee.address)).to.be.revertedWith("Mint limit exceeded");
     });
   });
 
@@ -49,7 +56,12 @@ describe.only("MembershipToken", function () {
     beforeEach(async function () {
       const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
       OM = <OrigamiMembershipToken>(
-        await upgrades.deployProxy(OM__factory, ["Deciduous Tree DAO Membership", "DTM", "https://ipfs.io/"])
+        await upgrades.deployProxy(OM__factory, [
+          owner.address,
+          "Deciduous Tree DAO Membership",
+          "DTM",
+          "https://ipfs.io/",
+        ])
       );
     });
     it("reverts when attempting to fetch tokenId 0", async function () {
@@ -61,8 +73,8 @@ describe.only("MembershipToken", function () {
     });
 
     it("allows the admin to set a base URI", async function () {
-      await OM.safeMint(mintee.address);
-      await OM.setBaseURI("https://ipfs.io/inter-planetary/");
+      await OM.connect(owner).safeMint(mintee.address);
+      await OM.connect(owner).setBaseURI("https://ipfs.io/inter-planetary/");
       expect(await OM.tokenURI(1)).to.be.eq("https://ipfs.io/inter-planetary/1");
     });
 
@@ -79,12 +91,17 @@ describe.only("MembershipToken", function () {
     beforeEach(async function () {
       const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
       OM = <OrigamiMembershipToken>(
-        await upgrades.deployProxy(OM__factory, ["Deciduous Tree DAO Membership", "DTM", "https://ipfs.io/"])
+        await upgrades.deployProxy(OM__factory, [
+          owner.address,
+          "Deciduous Tree DAO Membership",
+          "DTM",
+          "https://ipfs.io/",
+        ])
       );
     });
 
     it("allows the admin to pause", async function () {
-      await OM.pause();
+      await OM.connect(owner).pause();
       expect(await OM.paused()).to.be.eq(true);
     });
 
@@ -93,8 +110,8 @@ describe.only("MembershipToken", function () {
     });
 
     it("allows the admin to unpause", async function () {
-      await OM.pause();
-      await OM.unpause();
+      await OM.connect(owner).pause();
+      await OM.connect(owner).unpause();
       expect(await OM.paused()).to.be.eq(false);
     });
 
@@ -103,8 +120,8 @@ describe.only("MembershipToken", function () {
     });
 
     it("prevents minting when paused", async function () {
-      await OM.pause();
-      await expect(OM.safeMint(mintee.address)).to.be.revertedWith("Pausable: paused");
+      await OM.connect(owner).pause();
+      await expect(OM.connect(owner).safeMint(mintee.address)).to.be.revertedWith("Pausable: paused");
     });
   });
 
@@ -115,16 +132,21 @@ describe.only("MembershipToken", function () {
     beforeEach(async function () {
       const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
       OM = <OrigamiMembershipToken>(
-        await upgrades.deployProxy(OM__factory, ["Deciduous Tree DAO Membership", "DTM", "https://ipfs.io/"])
+        await upgrades.deployProxy(OM__factory, [
+          owner.address,
+          "Deciduous Tree DAO Membership",
+          "DTM",
+          "https://ipfs.io/",
+        ])
       );
-      minter = signers[3];
-      await OM.grantRole(await OM.MINTER_ROLE(), minter.address);
+      minter = signers[4];
+      await OM.connect(owner).grantRole(await OM.MINTER_ROLE(), minter.address);
     });
 
     it("allows minter to transfer (aka mint) when nontransferrable", async function () {
       expect(await OM.transferrable()).to.be.eq(false);
       // admin has minter role
-      await OM.safeMint(mintee.address);
+      await OM.connect(owner).safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       // minter has minter role too
       await OM.connect(minter).safeMint(mintee2.address);
@@ -132,35 +154,35 @@ describe.only("MembershipToken", function () {
     });
 
     it("prevents token transfers when disabled", async function () {
-      await OM.safeMint(mintee.address);
+      await OM.connect(owner).safeMint(mintee.address);
       await expect(OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1)).to.be.revertedWith(
         "Transferrable: transfers are disabled",
       );
     });
 
     it("allows token transfers when enabled", async function () {
-      await OM.safeMint(mintee.address);
-      await OM.enableTransfer();
+      await OM.connect(owner).safeMint(mintee.address);
+      await OM.connect(owner).enableTransfer();
       await OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1);
       expect(await OM.balanceOf(mintee2.address)).to.be.eq(1);
     });
 
     it("only allows the owner to transfer when transferrable", async function () {
-      await OM.safeMint(mintee.address);
-      await OM.enableTransfer();
+      await OM.connect(owner).safeMint(mintee.address);
+      await OM.connect(owner).enableTransfer();
       await expect(OM.connect(mintee2).transferFrom(mintee.address, mintee2.address, 1)).to.be.revertedWith(
         "ERC721: transfer caller is not owner nor approved",
       );
     });
 
     it("prevents enabling transfers when they're already enabled", async function () {
-      await OM.enableTransfer();
-      await expect(OM.enableTransfer()).to.be.revertedWith("Transferrable: transfers are enabled");
+      await OM.connect(owner).enableTransfer();
+      await expect(OM.connect(owner).enableTransfer()).to.be.revertedWith("Transferrable: transfers are enabled");
     });
 
     it("allows disabling transfers after they've been enabled", async function () {
-      await OM.enableTransfer();
-      await OM.disableTransfer();
+      await OM.connect(owner).enableTransfer();
+      await OM.connect(owner).disableTransfer();
       expect(await OM.transferrable()).to.be.false;
     });
   });
@@ -172,22 +194,27 @@ describe.only("MembershipToken", function () {
     beforeEach(async function () {
       const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
       OM = <OrigamiMembershipToken>(
-        await upgrades.deployProxy(OM__factory, ["Deciduous Tree DAO Membership", "DTM", "https://ipfs.io/"])
+        await upgrades.deployProxy(OM__factory, [
+          owner.address,
+          "Deciduous Tree DAO Membership",
+          "DTM",
+          "https://ipfs.io/",
+        ])
       );
-      revoker = signers[3];
-      await OM.grantRole(await OM.REVOKER_ROLE(), revoker.address);
+      revoker = signers[4];
+      await OM.connect(owner).grantRole(await OM.REVOKER_ROLE(), revoker.address);
     });
 
     it("allows admin to revoke", async function () {
-      await OM.safeMint(mintee.address);
+      await OM.connect(owner).safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       // admin is a revoker
-      await OM.revoke(mintee.address);
+      await OM.connect(owner).revoke(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(0);
     });
 
     it("allows REVOKER to revoke", async function () {
-      await OM.safeMint(mintee.address);
+      await OM.connect(owner).connect(owner).safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       // revoker is also a revoker
       await OM.connect(revoker).revoke(mintee.address);
@@ -199,7 +226,7 @@ describe.only("MembershipToken", function () {
     });
 
     it("reverts when from address does not own a token", async function () {
-      await expect(OM.revoke(mintee.address)).to.be.revertedWith("Revoke: cannot revoke");
+      await expect(OM.connect(owner).revoke(mintee.address)).to.be.revertedWith("Revoke: cannot revoke");
     });
   });
 });

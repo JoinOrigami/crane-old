@@ -24,9 +24,10 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "../common";
+} from "../../common";
 
-export interface OrigamiMembershipTokenInterface extends utils.Interface {
+export interface OrigamiMembershipTokenTestVersionInterface
+  extends utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "MINTER_ROLE()": FunctionFragment;
@@ -44,6 +45,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     "hasRole(bytes32,address)": FunctionFragment;
     "initialize(address,string,string,string)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "isFromUpgrade()": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "pause()": FunctionFragment;
@@ -85,6 +87,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
       | "hasRole"
       | "initialize"
       | "isApprovedForAll"
+      | "isFromUpgrade"
       | "name"
       | "ownerOf"
       | "pause"
@@ -165,6 +168,10 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isFromUpgrade",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
@@ -271,6 +278,10 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isFromUpgrade",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -442,12 +453,12 @@ export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
 
 export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
 
-export interface OrigamiMembershipToken extends BaseContract {
+export interface OrigamiMembershipTokenTestVersion extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: OrigamiMembershipTokenInterface;
+  interface: OrigamiMembershipTokenTestVersionInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -532,6 +543,8 @@ export interface OrigamiMembershipToken extends BaseContract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    isFromUpgrade(overrides?: CallOverrides): Promise<[boolean]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
@@ -697,6 +710,8 @@ export interface OrigamiMembershipToken extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  isFromUpgrade(overrides?: CallOverrides): Promise<boolean>;
+
   name(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
@@ -847,6 +862,8 @@ export interface OrigamiMembershipToken extends BaseContract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    isFromUpgrade(overrides?: CallOverrides): Promise<boolean>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -1074,6 +1091,8 @@ export interface OrigamiMembershipToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    isFromUpgrade(overrides?: CallOverrides): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(
@@ -1246,6 +1265,8 @@ export interface OrigamiMembershipToken extends BaseContract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    isFromUpgrade(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

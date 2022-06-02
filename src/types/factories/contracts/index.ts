@@ -5,3 +5,4 @@ export * as versions from "./versions";
 export { OrigamiGovernanceToken__factory } from "./OrigamiGovernanceToken__factory";
 export { OrigamiGovernanceTokenFactory__factory } from "./OrigamiGovernanceTokenFactory__factory";
 export { OrigamiMembershipToken__factory } from "./OrigamiMembershipToken__factory";
+export { OrigamiMembershipTokenFactory__factory } from "./OrigamiMembershipTokenFactory__factory";

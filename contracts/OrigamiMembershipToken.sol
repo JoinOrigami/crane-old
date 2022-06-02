@@ -36,6 +36,7 @@ contract OrigamiMembershipToken is
     }
 
     function initialize(
+        address _admin,
         string memory _name,
         string memory _symbol,
         string memory baseURI_
@@ -46,13 +47,19 @@ contract OrigamiMembershipToken is
         __AccessControl_init();
         __ERC721Burnable_init();
 
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(PAUSER_ROLE, msg.sender);
-        _grantRole(MINTER_ROLE, msg.sender);
-        _grantRole(REVOKER_ROLE, msg.sender);
+        // Temporarily grant admin to caller so it grant the following roles.
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
-        setBaseURI(baseURI_);
+        // grant all roles to the admin
+        _grantRole(DEFAULT_ADMIN_ROLE, _admin);
+        _grantRole(PAUSER_ROLE, _admin);
+        _grantRole(MINTER_ROLE, _admin);
+        _grantRole(REVOKER_ROLE, _admin);
 
+        // revoke admin grant for caller
+        _revokeRole(DEFAULT_ADMIN_ROLE, _msgSender());
+
+        _metadataBaseURI = baseURI_;
         _transferEnabled = false;
     }
 

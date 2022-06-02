@@ -6,3 +6,4 @@ export type { versions };
 export type { OrigamiGovernanceToken } from "./OrigamiGovernanceToken";
 export type { OrigamiGovernanceTokenFactory } from "./OrigamiGovernanceTokenFactory";
 export type { OrigamiMembershipToken } from "./OrigamiMembershipToken";
+export type { OrigamiMembershipTokenFactory } from "./OrigamiMembershipTokenFactory";
