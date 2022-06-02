@@ -24,6 +24,8 @@ contract OrigamiMembershipToken is
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant REVOKER_ROLE = keccak256("REVOKER_ROLE");
+
     CountersUpgradeable.Counter private _tokenIdCounter;
     string public _metadataBaseURI;
     bool private _transferEnabled;
@@ -48,6 +50,7 @@ contract OrigamiMembershipToken is
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(PAUSER_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
+        _grantRole(REVOKER_ROLE, msg.sender);
 
         setBaseURI(baseURI_);
 
@@ -78,6 +81,11 @@ contract OrigamiMembershipToken is
         _setTokenURI(tokenId, uri);
     }
 
+    function revoke(address from) public onlyRole(REVOKER_ROLE) {
+        require(balanceOf(from) == 1, "Revoke: cannot revoke");
+        _burn(tokenOfOwnerByIndex(from, 0));
+    }
+
     function transferrable() public view returns (bool) {
         return _transferEnabled;
     }
@@ -90,11 +98,36 @@ contract OrigamiMembershipToken is
         _transferEnabled = false;
     }
 
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public virtual override whenTransferrable {
+        super.transferFrom(from, to, tokenId);
+    }
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public virtual override whenTransferrable {
+        super.safeTransferFrom(from, to, tokenId);
+    }
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory _data
+    ) public virtual override whenTransferrable {
+        super.safeTransferFrom(from, to, tokenId, _data);
+    }
+
     function _beforeTokenTransfer(
         address from,
         address to,
         uint256 tokenId
-    ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) whenNotPaused whenTransferrable {
+    ) internal override(ERC721Upgradeable, ERC721EnumerableUpgradeable) whenNotPaused {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
@@ -110,7 +143,8 @@ contract OrigamiMembershipToken is
         override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
         returns (string memory)
     {
-        require(tokenId <= _tokenIdCounter.current() && tokenId != 0, "Invalid tokenId");
+        require(tokenId > 0, "Invalid token ID");
+        require(tokenId <= _tokenIdCounter.current(), "Invalid token ID");
         return super.tokenURI(tokenId);
     }
 
@@ -129,7 +163,7 @@ contract OrigamiMembershipToken is
     }
 
     modifier whenTransferrable() {
-        require(transferrable() || hasRole(MINTER_ROLE, _msgSender()), "Transferrable: transfers are disabled");
+        require(transferrable(), "Transferrable: transfers are disabled");
         _;
     }
 }

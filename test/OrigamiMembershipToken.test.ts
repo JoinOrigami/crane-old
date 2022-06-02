@@ -7,19 +7,17 @@ import type { OrigamiMembershipToken } from "../src/types";
 
 use(solidity);
 
-describe("MembershipToken", function () {
+describe.only("MembershipToken", function () {
   let signers: SignerWithAddress[];
   // let admin: SignerWithAddress;
   let mintee: SignerWithAddress;
   let mintee2: SignerWithAddress;
-  let minter: SignerWithAddress;
 
   before(async function () {
     signers = await ethers.getSigners();
     // admin = signers[0];
     mintee = signers[1];
     mintee2 = signers[2];
-    minter = signers[3];
   });
 
   describe("minting", function () {
@@ -55,11 +53,11 @@ describe("MembershipToken", function () {
       );
     });
     it("reverts when attempting to fetch tokenId 0", async function () {
-      await expect(OM.tokenURI(0)).to.be.revertedWith("Invalid tokenId");
+      await expect(OM.tokenURI(0)).to.be.reverted;
     });
 
     it("reverts when attempting to fetch an unminted tokenId", async function () {
-      await expect(OM.tokenURI(2)).to.be.revertedWith("Invalid tokenId");
+      await expect(OM.tokenURI(2)).to.be.reverted;
     });
 
     it("allows the admin to set a base URI", async function () {
@@ -112,12 +110,14 @@ describe("MembershipToken", function () {
 
   describe("transferrability", function () {
     let OM: OrigamiMembershipToken;
+    let minter: SignerWithAddress;
 
     beforeEach(async function () {
       const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
       OM = <OrigamiMembershipToken>(
         await upgrades.deployProxy(OM__factory, ["Deciduous Tree DAO Membership", "DTM", "https://ipfs.io/"])
       );
+      minter = signers[3];
       await OM.grantRole(await OM.MINTER_ROLE(), minter.address);
     });
 
@@ -145,6 +145,14 @@ describe("MembershipToken", function () {
       expect(await OM.balanceOf(mintee2.address)).to.be.eq(1);
     });
 
+    it("only allows the owner to transfer when transferrable", async function () {
+      await OM.safeMint(mintee.address, "foo");
+      await OM.enableTransfer();
+      await expect(OM.connect(mintee2).transferFrom(mintee.address, mintee2.address, 1)).to.be.revertedWith(
+        "ERC721: transfer caller is not owner nor approved",
+      );
+    });
+
     it("prevents enabling transfers when they're already enabled", async function () {
       await OM.enableTransfer();
       await expect(OM.enableTransfer()).to.be.revertedWith("Transferrable: transfers are enabled");
@@ -154,6 +162,44 @@ describe("MembershipToken", function () {
       await OM.enableTransfer();
       await OM.disableTransfer();
       expect(await OM.transferrable()).to.be.false;
+    });
+  });
+
+  describe("revoking", function () {
+    let OM: OrigamiMembershipToken;
+    let revoker: SignerWithAddress;
+
+    beforeEach(async function () {
+      const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
+      OM = <OrigamiMembershipToken>(
+        await upgrades.deployProxy(OM__factory, ["Deciduous Tree DAO Membership", "DTM", "https://ipfs.io/"])
+      );
+      revoker = signers[3];
+      await OM.grantRole(await OM.REVOKER_ROLE(), revoker.address);
+    });
+
+    it("allows admin to revoke", async function () {
+      await OM.safeMint(mintee.address, "foo");
+      expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
+      // admin is a revoker
+      await OM.revoke(mintee.address);
+      expect(await OM.balanceOf(mintee.address)).to.be.eq(0);
+    });
+
+    it("allows REVOKER to revoke", async function () {
+      await OM.safeMint(mintee.address, "foo");
+      expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
+      // revoker is also a revoker
+      await OM.connect(revoker).revoke(mintee.address);
+      expect(await OM.balanceOf(mintee.address)).to.be.eq(0);
+    });
+
+    it("reverts when non-admin tries to revoke", async function () {
+      await expect(OM.connect(mintee2).revoke(mintee.address)).to.be.revertedWith("AccessControl");
+    });
+
+    it("reverts when from address does not own a token", async function () {
+      await expect(OM.revoke(mintee.address)).to.be.revertedWith("Revoke: cannot revoke");
     });
   });
 });

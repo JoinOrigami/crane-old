@@ -31,6 +31,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "MINTER_ROLE()": FunctionFragment;
     "PAUSER_ROLE()": FunctionFragment;
+    "REVOKER_ROLE()": FunctionFragment;
     "_metadataBaseURI()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
@@ -48,6 +49,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     "pause()": FunctionFragment;
     "paused()": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
+    "revoke(address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "safeMint(address,string)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
@@ -70,6 +72,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
       | "DEFAULT_ADMIN_ROLE"
       | "MINTER_ROLE"
       | "PAUSER_ROLE"
+      | "REVOKER_ROLE"
       | "_metadataBaseURI"
       | "approve"
       | "balanceOf"
@@ -87,6 +90,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
       | "pause"
       | "paused"
       | "renounceRole"
+      | "revoke"
       | "revokeRole"
       | "safeMint"
       | "safeTransferFrom(address,address,uint256)"
@@ -114,6 +118,10 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "PAUSER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "REVOKER_ROLE",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -169,6 +177,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     functionFragment: "renounceRole",
     values: [BytesLike, string]
   ): string;
+  encodeFunctionData(functionFragment: "revoke", values: [string]): string;
   encodeFunctionData(
     functionFragment: "revokeRole",
     values: [BytesLike, string]
@@ -234,6 +243,10 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "REVOKER_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "_metadataBaseURI",
     data: BytesLike
   ): Result;
@@ -271,6 +284,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     functionFragment: "renounceRole",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "revoke", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "safeMint", data: BytesLike): Result;
   decodeFunctionResult(
@@ -464,6 +478,8 @@ export interface OrigamiMembershipToken extends BaseContract {
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
+    REVOKER_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
     _metadataBaseURI(overrides?: CallOverrides): Promise<[string]>;
 
     approve(
@@ -535,6 +551,11 @@ export interface OrigamiMembershipToken extends BaseContract {
     renounceRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    revoke(
+      from: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -621,6 +642,8 @@ export interface OrigamiMembershipToken extends BaseContract {
 
   PAUSER_ROLE(overrides?: CallOverrides): Promise<string>;
 
+  REVOKER_ROLE(overrides?: CallOverrides): Promise<string>;
+
   _metadataBaseURI(overrides?: CallOverrides): Promise<string>;
 
   approve(
@@ -689,6 +712,11 @@ export interface OrigamiMembershipToken extends BaseContract {
   renounceRole(
     role: BytesLike,
     account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  revoke(
+    from: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -772,6 +800,8 @@ export interface OrigamiMembershipToken extends BaseContract {
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<string>;
 
+    REVOKER_ROLE(overrides?: CallOverrides): Promise<string>;
+
     _metadataBaseURI(overrides?: CallOverrides): Promise<string>;
 
     approve(
@@ -833,6 +863,8 @@ export interface OrigamiMembershipToken extends BaseContract {
       account: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    revoke(from: string, overrides?: CallOverrides): Promise<void>;
 
     revokeRole(
       role: BytesLike,
@@ -983,6 +1015,8 @@ export interface OrigamiMembershipToken extends BaseContract {
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
+    REVOKER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
     _metadataBaseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
     approve(
@@ -1057,6 +1091,11 @@ export interface OrigamiMembershipToken extends BaseContract {
     renounceRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    revoke(
+      from: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1146,6 +1185,8 @@ export interface OrigamiMembershipToken extends BaseContract {
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    REVOKER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     _metadataBaseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     approve(
@@ -1223,6 +1264,11 @@ export interface OrigamiMembershipToken extends BaseContract {
     renounceRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    revoke(
+      from: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
