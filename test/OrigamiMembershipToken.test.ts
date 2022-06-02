@@ -31,15 +31,15 @@ describe.only("MembershipToken", function () {
     });
 
     it("mints membership NFTs", async function () {
-      await OM.safeMint(mintee.address, "foo");
+      await OM.safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       expect(await OM.ownerOf(1)).to.be.eq(mintee.address);
-      expect(await OM.tokenURI(1)).to.be.eq("https://ipfs.io/foo");
+      expect(await OM.tokenURI(1)).to.be.eq("https://ipfs.io/1");
     });
 
     it("limits minting to one NFT per address", async function () {
-      await OM.safeMint(mintee.address, "foo");
-      await expect(OM.safeMint(mintee.address, "bar")).to.be.revertedWith("Mint limit exceeded");
+      await OM.safeMint(mintee.address);
+      await expect(OM.safeMint(mintee.address)).to.be.revertedWith("Mint limit exceeded");
     });
   });
 
@@ -61,9 +61,9 @@ describe.only("MembershipToken", function () {
     });
 
     it("allows the admin to set a base URI", async function () {
-      await OM.safeMint(mintee.address, "foo");
+      await OM.safeMint(mintee.address);
       await OM.setBaseURI("https://ipfs.io/inter-planetary/");
-      expect(await OM.tokenURI(1)).to.be.eq("https://ipfs.io/inter-planetary/foo");
+      expect(await OM.tokenURI(1)).to.be.eq("https://ipfs.io/inter-planetary/1");
     });
 
     it("reverts when a non-admin tries to setBaseURI", async function () {
@@ -104,7 +104,7 @@ describe.only("MembershipToken", function () {
 
     it("prevents minting when paused", async function () {
       await OM.pause();
-      await expect(OM.safeMint(mintee.address, "foo")).to.be.revertedWith("Pausable: paused");
+      await expect(OM.safeMint(mintee.address)).to.be.revertedWith("Pausable: paused");
     });
   });
 
@@ -124,29 +124,29 @@ describe.only("MembershipToken", function () {
     it("allows minter to transfer (aka mint) when nontransferrable", async function () {
       expect(await OM.transferrable()).to.be.eq(false);
       // admin has minter role
-      await OM.safeMint(mintee.address, "foo");
+      await OM.safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       // minter has minter role too
-      await OM.connect(minter).safeMint(mintee2.address, "foo");
+      await OM.connect(minter).safeMint(mintee2.address);
       expect(await OM.balanceOf(mintee2.address)).to.be.eq(1);
     });
 
     it("prevents token transfers when disabled", async function () {
-      await OM.safeMint(mintee.address, "foo");
+      await OM.safeMint(mintee.address);
       await expect(OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1)).to.be.revertedWith(
         "Transferrable: transfers are disabled",
       );
     });
 
     it("allows token transfers when enabled", async function () {
-      await OM.safeMint(mintee.address, "foo");
+      await OM.safeMint(mintee.address);
       await OM.enableTransfer();
       await OM.connect(mintee).transferFrom(mintee.address, mintee2.address, 1);
       expect(await OM.balanceOf(mintee2.address)).to.be.eq(1);
     });
 
     it("only allows the owner to transfer when transferrable", async function () {
-      await OM.safeMint(mintee.address, "foo");
+      await OM.safeMint(mintee.address);
       await OM.enableTransfer();
       await expect(OM.connect(mintee2).transferFrom(mintee.address, mintee2.address, 1)).to.be.revertedWith(
         "ERC721: transfer caller is not owner nor approved",
@@ -179,7 +179,7 @@ describe.only("MembershipToken", function () {
     });
 
     it("allows admin to revoke", async function () {
-      await OM.safeMint(mintee.address, "foo");
+      await OM.safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       // admin is a revoker
       await OM.revoke(mintee.address);
@@ -187,7 +187,7 @@ describe.only("MembershipToken", function () {
     });
 
     it("allows REVOKER to revoke", async function () {
-      await OM.safeMint(mintee.address, "foo");
+      await OM.safeMint(mintee.address);
       expect(await OM.balanceOf(mintee.address)).to.be.eq(1);
       // revoker is also a revoker
       await OM.connect(revoker).revoke(mintee.address);

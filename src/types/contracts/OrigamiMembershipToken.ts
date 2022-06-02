@@ -51,7 +51,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     "renounceRole(bytes32,address)": FunctionFragment;
     "revoke(address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
-    "safeMint(address,string)": FunctionFragment;
+    "safeMint(address)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -182,10 +182,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     functionFragment: "revokeRole",
     values: [BytesLike, string]
   ): string;
-  encodeFunctionData(
-    functionFragment: "safeMint",
-    values: [string, string]
-  ): string;
+  encodeFunctionData(functionFragment: "safeMint", values: [string]): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     values: [string, string, BigNumberish]
@@ -567,7 +564,6 @@ export interface OrigamiMembershipToken extends BaseContract {
 
     safeMint(
       to: string,
-      uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -728,7 +724,6 @@ export interface OrigamiMembershipToken extends BaseContract {
 
   safeMint(
     to: string,
-    uri: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -872,7 +867,7 @@ export interface OrigamiMembershipToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    safeMint(to: string, uri: string, overrides?: CallOverrides): Promise<void>;
+    safeMint(to: string, overrides?: CallOverrides): Promise<void>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -1107,7 +1102,6 @@ export interface OrigamiMembershipToken extends BaseContract {
 
     safeMint(
       to: string,
-      uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1280,7 +1274,6 @@ export interface OrigamiMembershipToken extends BaseContract {
 
     safeMint(
       to: string,
-      uri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

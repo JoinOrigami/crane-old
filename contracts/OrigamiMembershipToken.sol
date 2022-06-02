@@ -3,7 +3,6 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
@@ -15,7 +14,6 @@ contract OrigamiMembershipToken is
     Initializable,
     ERC721Upgradeable,
     ERC721EnumerableUpgradeable,
-    ERC721URIStorageUpgradeable,
     PausableUpgradeable,
     AccessControlUpgradeable,
     ERC721BurnableUpgradeable
@@ -44,7 +42,6 @@ contract OrigamiMembershipToken is
     ) public initializer {
         __ERC721_init(_name, _symbol);
         __ERC721Enumerable_init();
-        __ERC721URIStorage_init();
         __Pausable_init();
         __AccessControl_init();
         __ERC721Burnable_init();
@@ -75,14 +72,12 @@ contract OrigamiMembershipToken is
         _unpause();
     }
 
-    function safeMint(address to, string memory uri) public onlyRole(MINTER_ROLE) {
+    function safeMint(address to) public onlyRole(MINTER_ROLE) {
         require(balanceOf(to) == 0, "Mint limit exceeded");
         _tokenIdCounter.increment();
         uint256 tokenId = _tokenIdCounter.current();
         _safeMint(to, tokenId);
         tokenIdToBlockTimestamp[tokenId] = block.timestamp;
-
-        _setTokenURI(tokenId, uri);
     }
 
     function revoke(address from) public onlyRole(REVOKER_ROLE) {
@@ -137,16 +132,11 @@ contract OrigamiMembershipToken is
 
     // The following functions are overrides required by Solidity.
 
-    function _burn(uint256 tokenId) internal override(ERC721Upgradeable, ERC721URIStorageUpgradeable) {
+    function _burn(uint256 tokenId) internal override(ERC721Upgradeable) {
         super._burn(tokenId);
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
-        returns (string memory)
-    {
+    function tokenURI(uint256 tokenId) public view override(ERC721Upgradeable) returns (string memory) {
         require(tokenId > 0, "Invalid token ID");
         require(tokenId <= _tokenIdCounter.current(), "Invalid token ID");
         return super.tokenURI(tokenId);
