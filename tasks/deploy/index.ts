@@ -58,6 +58,15 @@ task("deploy:membership-token", "Deploys the OrigamiMembershipToken contract")
     );
   });
 
+task("upgrade:membership-token", "Upgrades the OrigamiMembershipToken contract")
+  .addParam("proxyAddress", "address of the OrigamiMembershipToken proxy")
+  .setAction(async (args: TaskArguments, { ethers, network, upgrades }) => {
+    console.log(timeStamp(), `Upgrading OrigamiMembershipToken on ${network.name}`);
+    const OMT__factory = await ethers.getContractFactory("OrigamiMembershipToken");
+    const OMT = await upgrades.upgradeProxy(args.proxyAddress, OMT__factory);
+    console.log(timeStamp(), `OrigamiMembershipToken upgraded at ${OMT.address}`);
+  });
+
 task("deploy:membership-token-factory", "Deploys the OrigamiMembershipToken(Factory) contract")
   .addFlag("verboseOutput", "Adds verbose output to the deploy task")
   .setAction(async (args: TaskArguments, { ethers, network, upgrades }) => {
