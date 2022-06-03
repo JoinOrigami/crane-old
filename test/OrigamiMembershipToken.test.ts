@@ -48,6 +48,10 @@ describe("MembershipToken", function () {
       await OM.connect(owner).safeMint(mintee.address);
       await expect(OM.connect(owner).safeMint(mintee.address)).to.be.revertedWith("Holders may only have one token");
     });
+
+    it("emits a Mint event", async function () {
+      await expect(OM.connect(owner).safeMint(mintee.address)).to.emit(OM, "Mint").withArgs(mintee.address, 1);
+    });
   });
 
   describe("metadata", function () {

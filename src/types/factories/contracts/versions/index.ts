@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export { OrigamiGovernanceTokenTestVersion__factory } from "./OrigamiGovernanceTokenTestVersion__factory";
+export { OrigamiMembershipTokenBeforeMintEvent__factory } from "./OrigamiMembershipTokenBeforeMintEvent__factory";
 export { OrigamiMembershipTokenTestVersion__factory } from "./OrigamiMembershipTokenTestVersion__factory";

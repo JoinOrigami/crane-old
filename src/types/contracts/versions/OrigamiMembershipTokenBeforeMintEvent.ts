@@ -24,9 +24,10 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "../common";
+} from "../../common";
 
-export interface OrigamiMembershipTokenInterface extends utils.Interface {
+export interface OrigamiMembershipTokenBeforeMintEventInterface
+  extends utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "MINTER_ROLE()": FunctionFragment;
@@ -329,7 +330,6 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "Initialized(uint8)": EventFragment;
-    "Mint(address,uint256)": EventFragment;
     "Paused(address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
@@ -341,7 +341,6 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
@@ -380,14 +379,6 @@ export interface InitializedEventObject {
 export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
-
-export interface MintEventObject {
-  _to: string;
-  _tokenId: BigNumber;
-}
-export type MintEvent = TypedEvent<[string, BigNumber], MintEventObject>;
-
-export type MintEventFilter = TypedEventFilter<MintEvent>;
 
 export interface PausedEventObject {
   account: string;
@@ -452,12 +443,12 @@ export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
 
 export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
 
-export interface OrigamiMembershipToken extends BaseContract {
+export interface OrigamiMembershipTokenBeforeMintEvent extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: OrigamiMembershipTokenInterface;
+  interface: OrigamiMembershipTokenBeforeMintEventInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -964,12 +955,6 @@ export interface OrigamiMembershipToken extends BaseContract {
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
-
-    "Mint(address,uint256)"(
-      _to?: string | null,
-      _tokenId?: BigNumberish | null
-    ): MintEventFilter;
-    Mint(_to?: string | null, _tokenId?: BigNumberish | null): MintEventFilter;
 
     "Paused(address)"(account?: null): PausedEventFilter;
     Paused(account?: null): PausedEventFilter;

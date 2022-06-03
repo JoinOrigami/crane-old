@@ -133,6 +133,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OrigamiGovernanceTokenTestVersion__factory>;
     getContractFactory(
+      name: "OrigamiMembershipTokenBeforeMintEvent",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OrigamiMembershipTokenBeforeMintEvent__factory>;
+    getContractFactory(
       name: "OrigamiMembershipTokenTestVersion",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OrigamiMembershipTokenTestVersion__factory>;
@@ -287,6 +291,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.OrigamiGovernanceTokenTestVersion>;
+    getContractAt(
+      name: "OrigamiMembershipTokenBeforeMintEvent",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OrigamiMembershipTokenBeforeMintEvent>;
     getContractAt(
       name: "OrigamiMembershipTokenTestVersion",
       address: string,

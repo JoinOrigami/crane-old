@@ -340,6 +340,7 @@ export interface OrigamiMembershipTokenTestVersionInterface
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "Initialized(uint8)": EventFragment;
+    "Mint(address,uint256)": EventFragment;
     "Paused(address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
@@ -351,6 +352,7 @@ export interface OrigamiMembershipTokenTestVersionInterface
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
@@ -389,6 +391,14 @@ export interface InitializedEventObject {
 export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
+
+export interface MintEventObject {
+  _to: string;
+  _tokenId: BigNumber;
+}
+export type MintEvent = TypedEvent<[string, BigNumber], MintEventObject>;
+
+export type MintEventFilter = TypedEventFilter<MintEvent>;
 
 export interface PausedEventObject {
   account: string;
@@ -971,6 +981,12 @@ export interface OrigamiMembershipTokenTestVersion extends BaseContract {
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
+
+    "Mint(address,uint256)"(
+      _to?: string | null,
+      _tokenId?: BigNumberish | null
+    ): MintEventFilter;
+    Mint(_to?: string | null, _tokenId?: BigNumberish | null): MintEventFilter;
 
     "Paused(address)"(account?: null): PausedEventFilter;
     Paused(account?: null): PausedEventFilter;

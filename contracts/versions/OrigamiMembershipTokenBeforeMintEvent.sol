@@ -10,7 +10,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 
 /// @custom:security-contact contract-security@joinorigami.com
-contract OrigamiMembershipToken is
+contract OrigamiMembershipTokenBeforeMintEvent is
     Initializable,
     ERC721Upgradeable,
     ERC721EnumerableUpgradeable,
@@ -29,8 +29,6 @@ contract OrigamiMembershipToken is
 
     string public _metadataBaseURI;
     bool private _transferEnabled;
-
-    event Mint(address indexed _to, uint256 indexed _tokenId);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -86,7 +84,6 @@ contract OrigamiMembershipToken is
         uint256 tokenId = _tokenIdCounter.current();
         _safeMint(to, tokenId);
         tokenIdToBlockTimestamp[tokenId] = block.timestamp;
-        emit Mint(to, tokenId);
     }
 
     function revoke(address from) public onlyRole(REVOKER_ROLE) {

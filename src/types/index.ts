@@ -66,5 +66,7 @@ export type { OrigamiMembershipTokenFactory } from "./contracts/OrigamiMembershi
 export { OrigamiMembershipTokenFactory__factory } from "./factories/contracts/OrigamiMembershipTokenFactory__factory";
 export type { OrigamiGovernanceTokenTestVersion } from "./contracts/versions/OrigamiGovernanceTokenTestVersion";
 export { OrigamiGovernanceTokenTestVersion__factory } from "./factories/contracts/versions/OrigamiGovernanceTokenTestVersion__factory";
+export type { OrigamiMembershipTokenBeforeMintEvent } from "./contracts/versions/OrigamiMembershipTokenBeforeMintEvent";
+export { OrigamiMembershipTokenBeforeMintEvent__factory } from "./factories/contracts/versions/OrigamiMembershipTokenBeforeMintEvent__factory";
 export type { OrigamiMembershipTokenTestVersion } from "./contracts/versions/OrigamiMembershipTokenTestVersion";
 export { OrigamiMembershipTokenTestVersion__factory } from "./factories/contracts/versions/OrigamiMembershipTokenTestVersion__factory";
