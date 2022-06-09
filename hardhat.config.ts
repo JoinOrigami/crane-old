@@ -10,10 +10,7 @@ import { NetworkUserConfig } from "hardhat/types";
 import { resolve } from "path";
 import "solidity-coverage";
 
-import "./tasks/accounts";
-import "./tasks/clone";
-import "./tasks/deploy";
-import "./tasks/membership-token";
+import "./tasks";
 
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 
