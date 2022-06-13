@@ -2,6 +2,7 @@ import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
 
 import "./governance-token";
+import "./governance-token-factory";
 import "./membership-token";
 import "./membership-token-factory";
 
