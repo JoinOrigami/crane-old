@@ -121,3 +121,14 @@ task("governance-token:upgrade-forced", "Upgrades the OrigamiGovernanceToken con
     const OGT = await upgrades.upgradeProxy(args.proxyAddress, OGT__factory);
     console.log(timeStamp(), `OrigamiGovernanceToken upgraded at ${OGT.address}`);
   });
+
+task("governance-token:mint", "mint tokens (specify quantities in wei)")
+  .addParam("contractAddress", "address of the OrigamiGovernanceToken")
+  .addParam("recipientAddress", "address of the recipient of the OrigameGovernanceToken")
+  .addParam("amount", "integer value in wei")
+  .setAction(async (args: TaskArguments, { ethers }) => {
+    const OGT__factory: OrigamiGovernanceToken__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+    const OGT: OrigamiGovernanceToken = await OGT__factory.attach(args.contractAddress);
+
+    await OGT.mint(args.recipientAddress, args.amount);
+  });
