@@ -49,6 +49,9 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
     case "bsc":
       jsonRpcUrl = "https://bsc-dataseed1.binance.org";
       break;
+    case "mainnet":
+      jsonRpcUrl = "https://eth-mainnet.g.alchemy.com/v2/" + alchemyApiKey;
+      break;
     default:
       jsonRpcUrl = "https://" + chain + ".g.alchemy.com/v2/" + alchemyApiKey;
   }
