@@ -13,6 +13,7 @@ describe("GovernanceToken", function () {
   let owner: SignerWithAddress;
   let mintee: SignerWithAddress;
   let minter: SignerWithAddress;
+  let transferrer: SignerWithAddress;
 
   before(async function () {
     signers = await ethers.getSigners();
@@ -20,6 +21,7 @@ describe("GovernanceToken", function () {
     owner = signers[1];
     mintee = signers[2];
     minter = signers[3];
+    transferrer = signers[3];
   });
 
   describe("Limited Supply", function () {
@@ -142,14 +144,23 @@ describe("GovernanceToken", function () {
     });
 
     it("prevents burning when paused", async function () {
+      await OGT.connect(minter).mint(owner.address, 10);
       await OGT.connect(owner).pause();
       await expect(OGT.connect(owner).burn(1)).to.be.revertedWith("Pausable: paused");
     });
 
     it("prevents transfers when paused", async function () {
+      await OGT.connect(minter).mint(owner.address, 10);
       await OGT.connect(owner).pause();
       await OGT.connect(owner).enableTransfer();
       await expect(OGT.connect(owner).transfer(mintee.address, 1)).to.be.revertedWith("Pausable: paused");
+    });
+
+    it("prevents TRANSFERRER_ROLE transfers when paused", async function () {
+      await OGT.connect(minter).mint(transferrer.address, 10);
+      await OGT.connect(owner).pause();
+      await OGT.connect(owner).enableTransfer();
+      await expect(OGT.connect(transferrer).transfer(mintee.address, 1)).to.be.revertedWith("Pausable: paused");
     });
 
     it("allows burning when unpaused and burnable", async function () {
@@ -183,6 +194,7 @@ describe("GovernanceToken", function () {
         await upgrades.deployProxy(GTF__factory, [owner.address, "Orange Token", "ORANGE", 10])
       );
       await OGT.connect(owner).grantRole(await OGT.MINTER_ROLE(), minter.address);
+      await OGT.connect(owner).grantRole(await OGT.TRANSFERRER_ROLE(), transferrer.address);
     });
 
     it("only allows admin to set transferrable", async function () {
@@ -237,6 +249,24 @@ describe("GovernanceToken", function () {
       await OGT.connect(admin).transferFrom(mintee.address, admin.address, 1);
       expect(await OGT.balanceOf(mintee.address)).to.equal(1);
       expect(await OGT.balanceOf(admin.address)).to.equal(2);
+    });
+
+    it("allows TRANSFERRER_ROLE to transfer when transfer is disabled", async function () {
+      expect(await OGT.transferrable()).to.be.false;
+      await OGT.connect(minter).mint(transferrer.address, 10);
+      await OGT.connect(transferrer).transfer(admin.address, 5);
+      expect(await OGT.balanceOf(admin.address)).to.equal(5);
+      expect(await OGT.balanceOf(transferrer.address)).to.equal(5);
+    });
+
+    it("allows TRANSFERRER_ROLE to transfer when transfer is enabled", async function () {
+      expect(await OGT.transferrable()).to.be.false;
+      await OGT.connect(owner).enableTransfer();
+      expect(await OGT.transferrable()).to.be.true;
+      await OGT.connect(minter).mint(transferrer.address, 10);
+      await OGT.connect(transferrer).transfer(admin.address, 5);
+      expect(await OGT.balanceOf(admin.address)).to.equal(5);
+      expect(await OGT.balanceOf(transferrer.address)).to.equal(5);
     });
   });
 });

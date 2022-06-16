@@ -32,6 +32,7 @@ export interface OrigamiGovernanceTokenTestVersionInterface
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "MINTER_ROLE()": FunctionFragment;
     "PAUSER_ROLE()": FunctionFragment;
+    "TRANSFERRER_ROLE()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
@@ -71,6 +72,7 @@ export interface OrigamiGovernanceTokenTestVersionInterface
       | "DEFAULT_ADMIN_ROLE"
       | "MINTER_ROLE"
       | "PAUSER_ROLE"
+      | "TRANSFERRER_ROLE"
       | "allowance"
       | "approve"
       | "balanceOf"
@@ -115,6 +117,10 @@ export interface OrigamiGovernanceTokenTestVersionInterface
   ): string;
   encodeFunctionData(
     functionFragment: "PAUSER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "TRANSFERRER_ROLE",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -226,6 +232,10 @@ export interface OrigamiGovernanceTokenTestVersionInterface
   ): Result;
   decodeFunctionResult(
     functionFragment: "PAUSER_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "TRANSFERRER_ROLE",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
@@ -433,6 +443,8 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
+    TRANSFERRER_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
     allowance(
       owner: string,
       spender: string,
@@ -577,6 +589,8 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
 
   PAUSER_ROLE(overrides?: CallOverrides): Promise<string>;
 
+  TRANSFERRER_ROLE(overrides?: CallOverrides): Promise<string>;
+
   allowance(
     owner: string,
     spender: string,
@@ -720,6 +734,8 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
     MINTER_ROLE(overrides?: CallOverrides): Promise<string>;
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    TRANSFERRER_ROLE(overrides?: CallOverrides): Promise<string>;
 
     allowance(
       owner: string,
@@ -917,6 +933,8 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
+    TRANSFERRER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -1066,6 +1084,8 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
     MINTER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    TRANSFERRER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     allowance(
       owner: string,

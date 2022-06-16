@@ -21,6 +21,8 @@ contract OrigamiGovernanceToken is
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bool private _burnEnabled;
     bool private _transferEnabled;
+    // new storage slot added 2022-06-16
+    bytes32 public constant TRANSFERRER_ROLE = keccak256("TRANSFERRER_ROLE");
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -46,6 +48,7 @@ contract OrigamiGovernanceToken is
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
         _grantRole(PAUSER_ROLE, _admin);
         _grantRole(MINTER_ROLE, _admin);
+        // TRANSFERRER_ROLE does not need to be assigned during initialization
 
         // revoke admin grant for caller
         _revokeRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -144,7 +147,7 @@ contract OrigamiGovernanceToken is
     }
 
     modifier whenTransferrable() {
-        require(transferrable(), "Transferrable: transfers are disabled");
+        require(hasRole(TRANSFERRER_ROLE, _msgSender()) || transferrable(), "Transferrable: transfers are disabled");
         _;
     }
 }
