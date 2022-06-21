@@ -12,11 +12,12 @@ import { timeStamp, verboseLog } from "./utils";
 
 task("governance-token:query", "WIP query task for data about the OrigamiGovernanceToken contract")
   .addParam("contractAddress", "address of the OrigamiGovernanceTokenFactory")
-  .setAction(async (args: TaskArguments, { ethers }) => {
+  .setAction(async (args: TaskArguments, { ethers, upgrades }) => {
     const OGT__factory: OrigamiGovernanceToken__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
     const OGT: OrigamiGovernanceToken = await OGT__factory.attach(args.contractAddress);
 
     console.log("status:", {
+      admin: await upgrades.erc1967.getAdminAddress(args.contractAddress),
       name: await OGT.name(),
       symbol: await OGT.symbol(),
       supplyCap: await OGT.cap(),
