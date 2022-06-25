@@ -24,9 +24,10 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "../../../common";
+} from "../../common";
 
-export interface OrigamiGovernanceTokenInterface extends utils.Interface {
+export interface OrigamiGovernanceTokenBeforeTransferrerInterface
+  extends utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "MINTER_ROLE()": FunctionFragment;
@@ -389,12 +390,12 @@ export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
 
 export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
 
-export interface OrigamiGovernanceToken extends BaseContract {
+export interface OrigamiGovernanceTokenBeforeTransferrer extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: OrigamiGovernanceTokenInterface;
+  interface: OrigamiGovernanceTokenBeforeTransferrerInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

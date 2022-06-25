@@ -24,6 +24,15 @@ describe("GovernanceToken", function () {
     transferrer = signers[3];
   });
 
+  describe("initializing", function () {
+    it("reverts when initialized with the zero address as the admin", async function () {
+      const OG__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+      await expect(
+        upgrades.deployProxy(OG__factory, [ethers.constants.AddressZero, "Orange Token", "ORANGE", 10]),
+      ).to.be.revertedWith("Admin address cannot be zero");
+    });
+  });
+
   describe("Limited Supply", function () {
     let OGT: OrigamiGovernanceToken;
 

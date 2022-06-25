@@ -43,6 +43,8 @@ contract OrigamiMembershipToken is
         string memory _symbol,
         string memory baseURI_
     ) public initializer {
+        require(_admin != address(0x0), "Admin address cannot be zero");
+
         __ERC721_init(_name, _symbol);
         __ERC721Enumerable_init();
         __Pausable_init();

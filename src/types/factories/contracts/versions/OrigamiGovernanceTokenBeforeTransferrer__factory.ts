@@ -6,7 +6,7 @@ import type { Provider, TransactionRequest } from "@ethersproject/providers";
 import type {
   OrigamiGovernanceTokenBeforeTransferrer,
   OrigamiGovernanceTokenBeforeTransferrerInterface,
-} from "../../../../contracts/versions/OrigamiGovernanceTokenBeforeTransferrer.sol/OrigamiGovernanceTokenBeforeTransferrer";
+} from "../../../contracts/versions/OrigamiGovernanceTokenBeforeTransferrer";
 
 const _abi = [
   {

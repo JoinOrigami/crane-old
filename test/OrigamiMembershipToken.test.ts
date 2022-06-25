@@ -22,6 +22,20 @@ describe("MembershipToken", function () {
     mintee2 = signers[3];
   });
 
+  describe("initializing", function () {
+    it("reverts when initialized with the zero address as the admin", async function () {
+      const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
+      await expect(
+        upgrades.deployProxy(OM__factory, [
+          ethers.constants.AddressZero,
+          "Deciduous Tree DAO Membership",
+          "DTM",
+          "https://ipfs.io/",
+        ]),
+      ).to.be.revertedWith("Admin address cannot be zero");
+    });
+  });
+
   describe("minting", function () {
     let OM: OrigamiMembershipToken;
 

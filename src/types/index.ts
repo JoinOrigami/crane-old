@@ -64,8 +64,8 @@ export type { OrigamiMembershipToken } from "./contracts/OrigamiMembershipToken"
 export { OrigamiMembershipToken__factory } from "./factories/contracts/OrigamiMembershipToken__factory";
 export type { OrigamiMembershipTokenFactory } from "./contracts/OrigamiMembershipTokenFactory";
 export { OrigamiMembershipTokenFactory__factory } from "./factories/contracts/OrigamiMembershipTokenFactory__factory";
-export type { OrigamiGovernanceTokenBeforeTransferrer } from "./contracts/versions/OrigamiGovernanceTokenBeforeTransferrer.sol/OrigamiGovernanceTokenBeforeTransferrer";
-export { OrigamiGovernanceTokenBeforeTransferrer__factory } from "./factories/contracts/versions/OrigamiGovernanceTokenBeforeTransferrer.sol/OrigamiGovernanceTokenBeforeTransferrer__factory";
+export type { OrigamiGovernanceTokenBeforeTransferrer } from "./contracts/versions/OrigamiGovernanceTokenBeforeTransferrer";
+export { OrigamiGovernanceTokenBeforeTransferrer__factory } from "./factories/contracts/versions/OrigamiGovernanceTokenBeforeTransferrer__factory";
 export type { OrigamiGovernanceTokenTestVersion } from "./contracts/versions/OrigamiGovernanceTokenTestVersion";
 export { OrigamiGovernanceTokenTestVersion__factory } from "./factories/contracts/versions/OrigamiGovernanceTokenTestVersion__factory";
 export type { OrigamiMembershipTokenBeforeMintEvent } from "./contracts/versions/OrigamiMembershipTokenBeforeMintEvent";

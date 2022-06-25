@@ -35,6 +35,8 @@ contract OrigamiGovernanceToken is
         string memory _symbol,
         uint256 _supplyCap
     ) public initializer {
+        require(_admin != address(0x0), "Admin address cannot be zero");
+
         __ERC20_init(_name, _symbol);
         __ERC20Burnable_init();
         __Pausable_init();
