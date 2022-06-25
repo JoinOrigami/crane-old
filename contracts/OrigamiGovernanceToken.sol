@@ -68,17 +68,11 @@ contract OrigamiGovernanceToken is
         __AccessControl_init();
         __ERC20Capped_init(_supplyCap);
 
-        // Temporarily grant admin to caller so it can grant the following roles.
-        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
-
         // grant all roles to the admin
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
         _grantRole(PAUSER_ROLE, _admin);
         _grantRole(MINTER_ROLE, _admin);
         // TRANSFERRER_ROLE does not need to be assigned during initialization
-
-        // revoke admin grant for caller
-        _revokeRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
         _burnEnabled = false;
         _transferEnabled = false;
