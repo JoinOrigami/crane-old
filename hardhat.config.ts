@@ -4,6 +4,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@openzeppelin/hardhat-upgrades";
 import "@typechain/hardhat";
 import { config as dotenvConfig } from "dotenv";
+import "hardhat-docgen";
 import "hardhat-gas-reporter";
 import { HardhatUserConfig } from "hardhat/config";
 import { NetworkUserConfig } from "hardhat/types";
@@ -69,6 +70,12 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
+  docgen: {
+    path: "./docs/",
+    clear: true,
+    runOnCompile: true,
+    except: ["^contracts/versions/*.sol"],
+  },
   etherscan: {
     apiKey: {
       arbitrumOne: process.env.ARBISCAN_API_KEY,

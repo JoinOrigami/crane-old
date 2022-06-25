@@ -15,6 +15,7 @@
 **/dist
 **/node_modules
 .openzeppelin
+docs
 
 # files
 *.env
@@ -24,3 +25,4 @@ coverage.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
