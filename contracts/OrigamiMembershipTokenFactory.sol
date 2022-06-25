@@ -64,7 +64,7 @@ contract OrigamiMembershipTokenFactory is Initializable, AccessControlUpgradeabl
     /// @dev this is the programatic interface for getting the address of a proxy contract.
     /// @notice Retrieve a proxy contract address by index.
     /// @param index The zero-based index of the proxy contract to retrieve.
-    function getProxyContractAddress(uint256 index) public view onlyRole(DEFAULT_ADMIN_ROLE) returns (address payable) {
+    function getProxyContractAddress(uint256 index) public view returns (address payable) {
         require(index < proxiedContracts.length, "Proxy address index out of bounds");
         return payable(proxiedContracts[index]);
     }

@@ -131,8 +131,8 @@ describe("OrigamiGovernanceTokenFactory", function () {
       await expect(OGTF.getProxyContractAddress(2)).to.be.reverted;
     });
 
-    it("reverts when a non-admin attempts to retrieve proxy addresses", async function () {
-      await expect(OGTF.connect(mintee).getProxyContractAddress(0)).to.be.reverted;
+    it("allows non-admin to retrieve proxy addresses", async function () {
+      await expect(OGTF.connect(mintee).getProxyContractAddress(0)).to.not.be.reverted;
     });
 
     it("has access to the old functions", async function () {

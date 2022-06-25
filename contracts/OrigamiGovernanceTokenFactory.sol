@@ -46,7 +46,7 @@ contract OrigamiGovernanceTokenFactory is Initializable, AccessControlUpgradeabl
         return address(proxy);
     }
 
-    function getProxyContractAddress(uint256 index) public view onlyRole(DEFAULT_ADMIN_ROLE) returns (address payable) {
+    function getProxyContractAddress(uint256 index) public view returns (address payable) {
         require(index < proxiedContracts.length, "Proxy address index out of bounds");
         return payable(proxiedContracts[index]);
     }

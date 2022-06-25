@@ -148,8 +148,8 @@ describe("OrigamiMembershipTokenFactory", function () {
       await expect(OMF.getProxyContractAddress(2)).to.be.reverted;
     });
 
-    it("reverts when a non-admin attempts to retrieve proxy addresses", async function () {
-      await expect(OMF.connect(mintee).getProxyContractAddress(0)).to.be.reverted;
+    it("allows a non-admin to retrieve proxy addresses", async function () {
+      await expect(OMF.connect(mintee).getProxyContractAddress(0)).to.not.be.reverted;
     });
 
     it("has access to the old functions", async function () {
