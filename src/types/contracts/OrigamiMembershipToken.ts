@@ -335,6 +335,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
+    "TokenRevoked(address,address,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "TransferEnabled(address,bool)": EventFragment;
     "Unpaused(address)": EventFragment;
@@ -349,6 +350,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TokenRevoked"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TransferEnabled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
@@ -447,6 +449,18 @@ export type RoleRevokedEvent = TypedEvent<
 >;
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
+
+export interface TokenRevokedEventObject {
+  caller: string;
+  tokenOwner: string;
+  tokenId: BigNumber;
+}
+export type TokenRevokedEvent = TypedEvent<
+  [string, string, BigNumber],
+  TokenRevokedEventObject
+>;
+
+export type TokenRevokedEventFilter = TypedEventFilter<TokenRevokedEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -1041,6 +1055,17 @@ export interface OrigamiMembershipToken extends BaseContract {
       account?: string | null,
       sender?: string | null
     ): RoleRevokedEventFilter;
+
+    "TokenRevoked(address,address,uint256)"(
+      caller?: string | null,
+      tokenOwner?: string | null,
+      tokenId?: BigNumberish | null
+    ): TokenRevokedEventFilter;
+    TokenRevoked(
+      caller?: string | null,
+      tokenOwner?: string | null,
+      tokenId?: BigNumberish | null
+    ): TokenRevokedEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: string | null,
