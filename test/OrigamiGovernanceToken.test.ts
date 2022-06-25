@@ -46,7 +46,7 @@ describe("GovernanceToken", function () {
     });
   });
 
-  describe.only("minting", function () {
+  describe("minting", function () {
     let OG: OrigamiGovernanceToken;
 
     beforeEach(async function () {
