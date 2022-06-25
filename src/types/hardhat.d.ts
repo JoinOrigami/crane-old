@@ -129,6 +129,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OrigamiMembershipTokenFactory__factory>;
     getContractFactory(
+      name: "OrigamiGovernanceTokenBeforeInitialAuditFeedback",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OrigamiGovernanceTokenBeforeInitialAuditFeedback__factory>;
+    getContractFactory(
       name: "OrigamiGovernanceTokenBeforeTransferrer",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OrigamiGovernanceTokenBeforeTransferrer__factory>;
@@ -136,6 +140,10 @@ declare module "hardhat/types/runtime" {
       name: "OrigamiGovernanceTokenTestVersion",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OrigamiGovernanceTokenTestVersion__factory>;
+    getContractFactory(
+      name: "OrigamiMembershipTokenBeforeInitialAuditFeedback",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OrigamiMembershipTokenBeforeInitialAuditFeedback__factory>;
     getContractFactory(
       name: "OrigamiMembershipTokenBeforeMintEvent",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -291,6 +299,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.OrigamiMembershipTokenFactory>;
     getContractAt(
+      name: "OrigamiGovernanceTokenBeforeInitialAuditFeedback",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OrigamiGovernanceTokenBeforeInitialAuditFeedback>;
+    getContractAt(
       name: "OrigamiGovernanceTokenBeforeTransferrer",
       address: string,
       signer?: ethers.Signer
@@ -300,6 +313,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.OrigamiGovernanceTokenTestVersion>;
+    getContractAt(
+      name: "OrigamiMembershipTokenBeforeInitialAuditFeedback",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OrigamiMembershipTokenBeforeInitialAuditFeedback>;
     getContractAt(
       name: "OrigamiMembershipTokenBeforeMintEvent",
       address: string,
