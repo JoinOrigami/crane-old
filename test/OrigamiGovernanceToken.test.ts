@@ -33,6 +33,19 @@ describe("GovernanceToken", function () {
     });
   });
 
+  describe("upgrading", () => {
+    it("reverts when upgrading to the zero address", async () => {
+      // this version does not have a transferenabled event emitted
+      const OGBIAF__factory = await ethers.getContractFactory("OrigamiGovernanceTokenBeforeInitialAuditFeedback");
+      // this version _does_ emit a transferenabled event
+      const OG__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+      const OGBIAF = await upgrades.deployProxy(OGBIAF__factory, [owner.address, "Orange Token", "ORANGE", 10]);
+      // not throwing an error on upgrade means the storage layout is unaffected
+      const OG = await upgrades.upgradeProxy(OGBIAF.address, OG__factory);
+      await expect(OG.connect(owner).enableTransfer()).to.emit(OG, "TransferEnabled");
+    });
+  });
+
   describe("Limited Supply", function () {
     let OGT: OrigamiGovernanceToken;
 

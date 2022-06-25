@@ -36,6 +36,24 @@ describe("MembershipToken", function () {
     });
   });
 
+  describe("upgrading", () => {
+    it("reverts when upgrading to the zero address", async () => {
+      // this version does not have a transferenabled event emitted
+      const OMBIAF__factory = await ethers.getContractFactory("OrigamiMembershipTokenBeforeInitialAuditFeedback");
+      // this version _does_ emit a transferenabled event
+      const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
+      const OMBIAF = await upgrades.deployProxy(OMBIAF__factory, [
+        owner.address,
+        "Deciduous Tree DAO Membership",
+        "DTM",
+        "ipfs://d34d7233",
+      ]);
+      // not throwing an error on upgrade means the storage layout is unaffected
+      const OM = await upgrades.upgradeProxy(OMBIAF.address, OM__factory);
+      await expect(OM.connect(owner).enableTransfer()).to.emit(OM, "TransferEnabled");
+    });
+  });
+
   describe("minting", function () {
     let OM: OrigamiMembershipToken;
 
