@@ -310,6 +310,7 @@ export interface OrigamiGovernanceTokenTestVersionInterface
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "BurnEnabled(address,bool)": EventFragment;
+    "GovernanceTokensMinted(address,address,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Paused(address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
@@ -322,6 +323,7 @@ export interface OrigamiGovernanceTokenTestVersionInterface
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BurnEnabled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "GovernanceTokensMinted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
@@ -354,6 +356,19 @@ export type BurnEnabledEvent = TypedEvent<
 >;
 
 export type BurnEnabledEventFilter = TypedEventFilter<BurnEnabledEvent>;
+
+export interface GovernanceTokensMintedEventObject {
+  caller: string;
+  to: string;
+  amount: BigNumber;
+}
+export type GovernanceTokensMintedEvent = TypedEvent<
+  [string, string, BigNumber],
+  GovernanceTokensMintedEventObject
+>;
+
+export type GovernanceTokensMintedEventFilter =
+  TypedEventFilter<GovernanceTokensMintedEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -903,6 +918,17 @@ export interface OrigamiGovernanceTokenTestVersion extends BaseContract {
       value?: null
     ): BurnEnabledEventFilter;
     BurnEnabled(caller?: string | null, value?: null): BurnEnabledEventFilter;
+
+    "GovernanceTokensMinted(address,address,uint256)"(
+      caller?: string | null,
+      to?: string | null,
+      amount?: null
+    ): GovernanceTokensMintedEventFilter;
+    GovernanceTokensMinted(
+      caller?: string | null,
+      to?: string | null,
+      amount?: null
+    ): GovernanceTokensMintedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;

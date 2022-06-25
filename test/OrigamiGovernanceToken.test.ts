@@ -46,6 +46,30 @@ describe("GovernanceToken", function () {
     });
   });
 
+  describe.only("minting", function () {
+    let OG: OrigamiGovernanceToken;
+
+    beforeEach(async function () {
+      const OG__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
+      OG = <OrigamiGovernanceToken>(
+        await upgrades.deployProxy(OG__factory, [owner.address, "Orange Token", "ORANGE", 10])
+      );
+      await OG.connect(owner).grantRole(await OG.MINTER_ROLE(), minter.address);
+    });
+
+    it("reverts when minting with the zero address", async function () {
+      await expect(OG.connect(minter).mint(ethers.constants.AddressZero, 1)).to.be.revertedWith(
+        "ERC20: mint to the zero address",
+      );
+    });
+
+    it("emits an event when minting occurs", async function () {
+      await expect(OG.connect(minter).mint(mintee.address, 10))
+        .to.emit(OG, "GovernanceTokensMinted")
+        .withArgs(minter.address, mintee.address, 10);
+    });
+  });
+
   describe("Limited Supply", function () {
     let OGT: OrigamiGovernanceToken;
 
