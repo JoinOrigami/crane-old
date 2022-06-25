@@ -25,6 +25,7 @@ contract OrigamiMembershipToken is
     bytes32 public constant REVOKER_ROLE = keccak256("REVOKER_ROLE");
 
     CountersUpgradeable.Counter private _tokenIdCounter;
+    // @notice: timestamp is purely informative and may vary by up to 900 seconds from actual time of execution
     mapping(uint256 => uint256) tokenIdToBlockTimestamp;
 
     string public _metadataBaseURI;
