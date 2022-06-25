@@ -3,7 +3,7 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers, upgrades } from "hardhat";
 
-import type { OrigamiMembershipToken } from "../src/types";
+import { OrigamiMembershipToken } from "../src/types";
 
 use(solidity);
 
@@ -83,6 +83,25 @@ describe("MembershipToken", function () {
 
     it("emits a Mint event", async function () {
       await expect(OM.connect(owner).safeMint(mintee.address)).to.emit(OM, "Mint").withArgs(mintee.address, 1);
+    });
+  });
+
+  describe("silly coverage tests", function () {
+    let OM: OrigamiMembershipToken;
+
+    beforeEach(async function () {
+      const OM__factory = await ethers.getContractFactory("OrigamiMembershipToken");
+      OM = <OrigamiMembershipToken>(
+        await upgrades.deployProxy(OM__factory, [
+          owner.address,
+          "Deciduous Tree DAO Membership",
+          "DTM",
+          "https://ipfs.io/",
+        ])
+      );
+    });
+    it("does nothing but delegate the implementation of supportsInterface", async function () {
+      expect(await OM.supportsInterface(ethers.utils.hexZeroPad("0x0", 4))).to.be.false;
     });
   });
 
