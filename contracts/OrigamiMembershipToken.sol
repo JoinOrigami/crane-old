@@ -132,7 +132,7 @@ contract OrigamiMembershipToken is
     function revoke(address from) public onlyRole(REVOKER_ROLE) {
         require(balanceOf(from) == 1, "Revoke: cannot revoke");
         uint256 tokenId = tokenOfOwnerByIndex(from, 0);
-        burn(tokenId);
+        _burn(tokenId);
         emit TokenRevoked(_msgSender(), from, tokenId);
     }
 
