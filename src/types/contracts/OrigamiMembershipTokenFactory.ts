@@ -137,12 +137,16 @@ export interface OrigamiMembershipTokenFactoryInterface
 
   events: {
     "Initialized(uint8)": EventFragment;
+    "OrigamiMembershipTokenCreated(address,address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "OrigamiMembershipTokenCreated"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
@@ -154,6 +158,18 @@ export interface InitializedEventObject {
 export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
+
+export interface OrigamiMembershipTokenCreatedEventObject {
+  caller: string;
+  proxy: string;
+}
+export type OrigamiMembershipTokenCreatedEvent = TypedEvent<
+  [string, string],
+  OrigamiMembershipTokenCreatedEventObject
+>;
+
+export type OrigamiMembershipTokenCreatedEventFilter =
+  TypedEventFilter<OrigamiMembershipTokenCreatedEvent>;
 
 export interface RoleAdminChangedEventObject {
   role: string;
@@ -388,6 +404,15 @@ export interface OrigamiMembershipTokenFactory extends BaseContract {
   filters: {
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
+
+    "OrigamiMembershipTokenCreated(address,address)"(
+      caller?: string | null,
+      proxy?: null
+    ): OrigamiMembershipTokenCreatedEventFilter;
+    OrigamiMembershipTokenCreated(
+      caller?: string | null,
+      proxy?: null
+    ): OrigamiMembershipTokenCreatedEventFilter;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(
       role?: BytesLike | null,

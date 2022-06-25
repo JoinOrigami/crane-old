@@ -13,6 +13,8 @@ contract OrigamiMembershipTokenFactory is Initializable, AccessControlUpgradeabl
     address[] public proxiedContracts;
     address private tokenImplementation;
 
+    event OrigamiMembershipTokenCreated(address indexed caller, address proxy);
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -40,6 +42,7 @@ contract OrigamiMembershipTokenFactory is Initializable, AccessControlUpgradeabl
         );
         TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(clone, _msgSender(), data);
         proxiedContracts.push(address(proxy));
+        emit OrigamiMembershipTokenCreated(_msgSender(), address(proxy));
         return address(proxy);
     }
 

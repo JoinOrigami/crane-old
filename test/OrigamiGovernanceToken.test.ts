@@ -70,6 +70,15 @@ describe("GovernanceToken", function () {
       await OGT.connect(owner).grantRole(await OGT.MINTER_ROLE(), minter.address);
     });
 
+    it("emits a BurnEnabled event when burning is enabled", async () => {
+      await expect(OGT.connect(owner).enableBurn()).to.emit(OGT, "BurnEnabled").withArgs(owner.address, true);
+    });
+
+    it("emits a BurnEnabled event when burning is disabled", async () => {
+      await OGT.connect(owner).enableBurn();
+      await expect(OGT.connect(owner).disableBurn()).to.emit(OGT, "BurnEnabled").withArgs(owner.address, false);
+    });
+
     it("reverts if non-admin tries to set enableBurn", async function () {
       await expect(OGT.connect(mintee).enableBurn()).to.be.revertedWith("AccessControl");
     });
@@ -206,6 +215,14 @@ describe("GovernanceToken", function () {
       await OGT.connect(owner).grantRole(await OGT.TRANSFERRER_ROLE(), transferrer.address);
     });
 
+    it("emits a TransferEnabled event when transfer is enabled", async () => {
+      await expect(OGT.connect(owner).enableTransfer()).to.emit(OGT, "TransferEnabled").withArgs(owner.address, true);
+    });
+
+    it("emits a TransferEnabled event when transfer is disabled", async () => {
+      await OGT.connect(owner).enableTransfer();
+      await expect(OGT.connect(owner).disableTransfer()).to.emit(OGT, "TransferEnabled").withArgs(owner.address, false);
+    });
     it("only allows admin to set transferrable", async function () {
       await expect(OGT.connect(mintee).enableTransfer()).to.be.revertedWith("AccessControl");
       await OGT.connect(owner).enableTransfer();

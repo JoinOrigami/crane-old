@@ -32,6 +32,8 @@ contract OrigamiMembershipToken is
     bool private _transferEnabled;
 
     event Mint(address indexed _to, uint256 indexed _tokenId);
+    event BaseURIChanged(address indexed caller, string value);
+    event TransferEnabled(address indexed caller, bool value);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -73,6 +75,7 @@ contract OrigamiMembershipToken is
     }
 
     function setBaseURI(string memory baseURI_) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        emit BaseURIChanged(_msgSender(), baseURI_);
         _metadataBaseURI = baseURI_;
     }
 
@@ -103,10 +106,12 @@ contract OrigamiMembershipToken is
 
     function enableTransfer() public onlyRole(DEFAULT_ADMIN_ROLE) whenNontransferrable {
         _transferEnabled = true;
+        emit TransferEnabled(_msgSender(), _transferEnabled);
     }
 
     function disableTransfer() public onlyRole(DEFAULT_ADMIN_ROLE) whenTransferrable {
         _transferEnabled = false;
+        emit TransferEnabled(_msgSender(), _transferEnabled);
     }
 
     function transferFrom(

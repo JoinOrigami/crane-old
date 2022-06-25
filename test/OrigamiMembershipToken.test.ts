@@ -90,6 +90,12 @@ describe("MembershipToken", function () {
       await expect(OM.tokenURI(2)).to.be.reverted;
     });
 
+    it("emits an event when the base URI is changed", async () => {
+      await expect(OM.connect(owner).setBaseURI("tacos"))
+        .to.emit(OM, "BaseURIChanged")
+        .withArgs(owner.address, "tacos");
+    });
+
     it("allows the admin to set a base URI", async function () {
       await OM.connect(owner).safeMint(mintee.address);
       await OM.connect(owner).setBaseURI("https://ipfs.io/inter-planetary/");
@@ -159,6 +165,15 @@ describe("MembershipToken", function () {
       );
       minter = signers[4];
       await OM.connect(owner).grantRole(await OM.MINTER_ROLE(), minter.address);
+    });
+
+    it("emits an event when transfer is enabled", async () => {
+      await expect(OM.connect(owner).enableTransfer()).to.emit(OM, "TransferEnabled").withArgs(owner.address, true);
+    });
+
+    it("emits an event when transfer is enabled", async () => {
+      await OM.connect(owner).enableTransfer();
+      await expect(OM.connect(owner).disableTransfer()).to.emit(OM, "TransferEnabled").withArgs(owner.address, false);
     });
 
     it("allows minter to transfer (aka mint) when nontransferrable", async function () {

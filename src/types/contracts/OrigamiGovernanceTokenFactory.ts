@@ -137,12 +137,16 @@ export interface OrigamiGovernanceTokenFactoryInterface
 
   events: {
     "Initialized(uint8)": EventFragment;
+    "OrigamiGovernanceTokenCreated(address,address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "OrigamiGovernanceTokenCreated"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
@@ -154,6 +158,18 @@ export interface InitializedEventObject {
 export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
+
+export interface OrigamiGovernanceTokenCreatedEventObject {
+  caller: string;
+  proxy: string;
+}
+export type OrigamiGovernanceTokenCreatedEvent = TypedEvent<
+  [string, string],
+  OrigamiGovernanceTokenCreatedEventObject
+>;
+
+export type OrigamiGovernanceTokenCreatedEventFilter =
+  TypedEventFilter<OrigamiGovernanceTokenCreatedEvent>;
 
 export interface RoleAdminChangedEventObject {
   role: string;
@@ -388,6 +404,15 @@ export interface OrigamiGovernanceTokenFactory extends BaseContract {
   filters: {
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
+
+    "OrigamiGovernanceTokenCreated(address,address)"(
+      caller?: string | null,
+      proxy?: null
+    ): OrigamiGovernanceTokenCreatedEventFilter;
+    OrigamiGovernanceTokenCreated(
+      caller?: string | null,
+      proxy?: null
+    ): OrigamiGovernanceTokenCreatedEventFilter;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(
       role?: BytesLike | null,

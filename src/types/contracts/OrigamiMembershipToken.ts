@@ -328,6 +328,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "BaseURIChanged(address,string)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Mint(address,uint256)": EventFragment;
     "Paused(address)": EventFragment;
@@ -335,11 +336,13 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
+    "TransferEnabled(address,bool)": EventFragment;
     "Unpaused(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BaseURIChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
@@ -347,6 +350,7 @@ export interface OrigamiMembershipTokenInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TransferEnabled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
 
@@ -373,6 +377,17 @@ export type ApprovalForAllEvent = TypedEvent<
 >;
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
+
+export interface BaseURIChangedEventObject {
+  caller: string;
+  value: string;
+}
+export type BaseURIChangedEvent = TypedEvent<
+  [string, string],
+  BaseURIChangedEventObject
+>;
+
+export type BaseURIChangedEventFilter = TypedEventFilter<BaseURIChangedEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -444,6 +459,17 @@ export type TransferEvent = TypedEvent<
 >;
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
+
+export interface TransferEnabledEventObject {
+  caller: string;
+  value: boolean;
+}
+export type TransferEnabledEvent = TypedEvent<
+  [string, boolean],
+  TransferEnabledEventObject
+>;
+
+export type TransferEnabledEventFilter = TypedEventFilter<TransferEnabledEvent>;
 
 export interface UnpausedEventObject {
   account: string;
@@ -962,6 +988,15 @@ export interface OrigamiMembershipToken extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
+    "BaseURIChanged(address,string)"(
+      caller?: string | null,
+      value?: null
+    ): BaseURIChangedEventFilter;
+    BaseURIChanged(
+      caller?: string | null,
+      value?: null
+    ): BaseURIChangedEventFilter;
+
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
 
@@ -1017,6 +1052,15 @@ export interface OrigamiMembershipToken extends BaseContract {
       to?: string | null,
       tokenId?: BigNumberish | null
     ): TransferEventFilter;
+
+    "TransferEnabled(address,bool)"(
+      caller?: string | null,
+      value?: null
+    ): TransferEnabledEventFilter;
+    TransferEnabled(
+      caller?: string | null,
+      value?: null
+    ): TransferEnabledEventFilter;
 
     "Unpaused(address)"(account?: null): UnpausedEventFilter;
     Unpaused(account?: null): UnpausedEventFilter;

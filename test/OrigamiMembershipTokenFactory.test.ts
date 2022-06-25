@@ -46,13 +46,9 @@ describe("OrigamiMembershipTokenFactory", function () {
       const aDaoAddress = await OMF.getProxyContractAddress(0);
       aDao = <OrigamiMembershipToken>await OMT__factory.attach(aDaoAddress as string);
 
-      const bDaoTx = await OMF.createOrigamiMembershipToken(
-        owner.address,
-        "BBQ DAO Membership",
-        "BBQ",
-        "https://ipfs.io/wtfbbq/",
-      );
-      await bDaoTx.wait();
+      await expect(
+        OMF.createOrigamiMembershipToken(owner.address, "BBQ DAO Membership", "BBQ", "https://ipfs.io/wtfbbq/"),
+      ).to.emit(OMF, "OrigamiMembershipTokenCreated");
       const bDaoAddress = await OMF.getProxyContractAddress(1);
       bDao = <OrigamiMembershipToken>await OMT__factory.attach(bDaoAddress as string);
     });

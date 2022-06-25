@@ -24,6 +24,9 @@ contract OrigamiGovernanceToken is
     // new storage slot added 2022-06-16
     bytes32 public constant TRANSFERRER_ROLE = keccak256("TRANSFERRER_ROLE");
 
+    event TransferEnabled(address indexed caller, bool value);
+    event BurnEnabled(address indexed caller, bool value);
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -65,10 +68,12 @@ contract OrigamiGovernanceToken is
 
     function enableBurn() public onlyRole(DEFAULT_ADMIN_ROLE) whenNotBurnable {
         _burnEnabled = true;
+        emit BurnEnabled(_msgSender(), _burnEnabled);
     }
 
     function disableBurn() public onlyRole(DEFAULT_ADMIN_ROLE) whenBurnable {
         _burnEnabled = false;
+        emit BurnEnabled(_msgSender(), _burnEnabled);
     }
 
     function transferrable() public view returns (bool) {
@@ -77,10 +82,12 @@ contract OrigamiGovernanceToken is
 
     function enableTransfer() public onlyRole(DEFAULT_ADMIN_ROLE) whenNontransferrable {
         _transferEnabled = true;
+        emit TransferEnabled(_msgSender(), _transferEnabled);
     }
 
     function disableTransfer() public onlyRole(DEFAULT_ADMIN_ROLE) whenTransferrable {
         _transferEnabled = false;
+        emit TransferEnabled(_msgSender(), _transferEnabled);
     }
 
     function pause() public onlyRole(PAUSER_ROLE) {

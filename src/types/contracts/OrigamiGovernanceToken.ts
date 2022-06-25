@@ -298,22 +298,26 @@ export interface OrigamiGovernanceTokenInterface extends utils.Interface {
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
+    "BurnEnabled(address,bool)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "Paused(address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
+    "TransferEnabled(address,bool)": EventFragment;
     "Unpaused(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BurnEnabled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TransferEnabled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
 
@@ -328,6 +332,17 @@ export type ApprovalEvent = TypedEvent<
 >;
 
 export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>;
+
+export interface BurnEnabledEventObject {
+  caller: string;
+  value: boolean;
+}
+export type BurnEnabledEvent = TypedEvent<
+  [string, boolean],
+  BurnEnabledEventObject
+>;
+
+export type BurnEnabledEventFilter = TypedEventFilter<BurnEnabledEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -391,6 +406,17 @@ export type TransferEvent = TypedEvent<
 >;
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
+
+export interface TransferEnabledEventObject {
+  caller: string;
+  value: boolean;
+}
+export type TransferEnabledEvent = TypedEvent<
+  [string, boolean],
+  TransferEnabledEventObject
+>;
+
+export type TransferEnabledEventFilter = TypedEventFilter<TransferEnabledEvent>;
 
 export interface UnpausedEventObject {
   account: string;
@@ -855,6 +881,12 @@ export interface OrigamiGovernanceToken extends BaseContract {
       value?: null
     ): ApprovalEventFilter;
 
+    "BurnEnabled(address,bool)"(
+      caller?: string | null,
+      value?: null
+    ): BurnEnabledEventFilter;
+    BurnEnabled(caller?: string | null, value?: null): BurnEnabledEventFilter;
+
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
 
@@ -904,6 +936,15 @@ export interface OrigamiGovernanceToken extends BaseContract {
       to?: string | null,
       value?: null
     ): TransferEventFilter;
+
+    "TransferEnabled(address,bool)"(
+      caller?: string | null,
+      value?: null
+    ): TransferEnabledEventFilter;
+    TransferEnabled(
+      caller?: string | null,
+      value?: null
+    ): TransferEnabledEventFilter;
 
     "Unpaused(address)"(account?: null): UnpausedEventFilter;
     Unpaused(account?: null): UnpausedEventFilter;

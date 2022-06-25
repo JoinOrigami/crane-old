@@ -35,8 +35,11 @@ describe("OrigamiGovernanceTokenFactory", function () {
       const OGTF__factory = await ethers.getContractFactory("OrigamiGovernanceTokenFactory");
       const OGT__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
       OGTF = <OrigamiGovernanceTokenFactory>await upgrades.deployProxy(OGTF__factory, []);
-      const KidAtx = await OGTF.createOrigamiGovernanceToken(owner.address, "Kid A", "KIDA", 10);
-      await KidAtx.wait();
+      await expect(OGTF.createOrigamiGovernanceToken(owner.address, "Kid A", "KIDA", 10)).to.emit(
+        OGTF,
+        "OrigamiGovernanceTokenCreated",
+      );
+
       const KidAAddress = await OGTF.getProxyContractAddress(0);
       KidA = <OrigamiGovernanceToken>await OGT__factory.attach(KidAAddress as string);
       const OkCtx = await OGTF.createOrigamiGovernanceToken(owner.address, "Okay Computer", "OKC", 100);
