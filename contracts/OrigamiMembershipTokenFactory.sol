@@ -19,7 +19,7 @@ contract OrigamiMembershipTokenFactory is Initializable, AccessControlUpgradeabl
     address private tokenImplementation;
 
     /// @notice The event emitted when a new OrigamiMembershipToken is created.
-    event OrigamiMembershipTokenCreated(address indexed caller, address proxy);
+    event OrigamiMembershipTokenCreated(address indexed caller, address indexed proxy);
 
     /// @notice the constructor is not used since the contract is upgradeable except to disable initializers in the implementations that are deployed.
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -41,6 +41,7 @@ contract OrigamiMembershipTokenFactory is Initializable, AccessControlUpgradeabl
     /// @param _name the name of the token. Typically this is the name of the DAO.
     /// @param _symbol the symbol of the token. Typically this is a short abbreviation of the DAO's name.
     /// @param baseURI_ the base URI of the token. This is used to generate the token's URI.
+    /// @return the address of the newly deployed OrigamiMembershipToken.
     function createOrigamiMembershipToken(
         address _admin,
         string memory _name,
@@ -64,6 +65,7 @@ contract OrigamiMembershipTokenFactory is Initializable, AccessControlUpgradeabl
     /// @dev this is the programatic interface for getting the address of a proxy contract.
     /// @notice Retrieve a proxy contract address by index.
     /// @param index The zero-based index of the proxy contract to retrieve.
+    /// @return the address of the proxy contract at the given index.
     function getProxyContractAddress(uint256 index) public view returns (address payable) {
         require(index < proxiedContracts.length, "Proxy address index out of bounds");
         return payable(proxiedContracts[index]);

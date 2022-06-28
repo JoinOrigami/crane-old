@@ -206,4 +206,3 @@ contract OrigamiGovernanceToken is
         _;
     }
 }
-/// @notice this modifier allows us to ensure that something may only occur when the transfers are enabled

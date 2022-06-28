@@ -407,11 +407,11 @@ export interface OrigamiMembershipTokenFactory extends BaseContract {
 
     "OrigamiMembershipTokenCreated(address,address)"(
       caller?: string | null,
-      proxy?: null
+      proxy?: string | null
     ): OrigamiMembershipTokenCreatedEventFilter;
     OrigamiMembershipTokenCreated(
       caller?: string | null,
-      proxy?: null
+      proxy?: string | null
     ): OrigamiMembershipTokenCreatedEventFilter;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(

@@ -407,11 +407,11 @@ export interface OrigamiGovernanceTokenFactory extends BaseContract {
 
     "OrigamiGovernanceTokenCreated(address,address)"(
       caller?: string | null,
-      proxy?: null
+      proxy?: string | null
     ): OrigamiGovernanceTokenCreatedEventFilter;
     OrigamiGovernanceTokenCreated(
       caller?: string | null,
-      proxy?: null
+      proxy?: string | null
     ): OrigamiGovernanceTokenCreatedEventFilter;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(
