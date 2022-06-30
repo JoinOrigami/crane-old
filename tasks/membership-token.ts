@@ -10,16 +10,29 @@ import {
 } from "../src/types";
 import { timeStamp, verboseLog } from "./utils";
 
-task("membership-token:query", "WIP query task for data about the OrigamiMembershipToken contract")
-  .addParam("contractAddress", "address of the OrigamiMembershipTokenFactory")
-  .setAction(async (args: TaskArguments, { ethers }) => {
+task("membership-token:query", "query task for data about the OrigamiMembershipToken contract")
+  .addParam("contractAddress", "address of the OrigamiMembershipToken")
+  .setAction(async (args: TaskArguments, { ethers, upgrades }) => {
     const OMT__factory: OrigamiMembershipToken__factory = await ethers.getContractFactory("OrigamiMembershipToken");
     const OMT: OrigamiMembershipToken = await OMT__factory.attach(args.contractAddress);
 
-    console.log("attached to OrigamiMembershipToken");
-    // console.log("paused?", await OMT.paused());
-    console.log("name", await OMT.name());
-    console.log({ OMT });
+    console.log("status:", {
+      admin: await upgrades.erc1967.getAdminAddress(args.contractAddress),
+      name: await OMT.name(),
+      symbol: await OMT.symbol(),
+      minterRole: await OMT.MINTER_ROLE(),
+      pauserRole: await OMT.PAUSER_ROLE(),
+      revokerRole: await OMT.REVOKER_ROLE(),
+      paused: await OMT.paused(),
+      transferrable: await OMT.transferrable(),
+    });
+  });
+
+task("membership-token:change-proxy-admin", "Update the admin for the proxy")
+  .addParam("proxyAddress", "address of the OrigamiMembershipToken proxy")
+  .addParam("admin", "address of the new admin")
+  .setAction(async (args: TaskArguments, { upgrades }) => {
+    await upgrades.admin.changeProxyAdmin(args.proxyAddress, args.admin);
   });
 
 task(
@@ -102,6 +115,7 @@ task("membership-token:upgrade", "Upgrades the OrigamiMembershipToken contract")
     console.log(timeStamp(), `Upgrading OrigamiMembershipToken on ${network.name}`);
     const OMT__factory = await ethers.getContractFactory("OrigamiMembershipToken");
     const OMT = await upgrades.upgradeProxy(args.proxyAddress, OMT__factory);
+    console.log(timeStamp(), `OrigamiMembershipToken transaction ${OMT.deployTransaction.hash}`);
     console.log(timeStamp(), `OrigamiMembershipToken upgraded at ${OMT.address}`);
   });
 
