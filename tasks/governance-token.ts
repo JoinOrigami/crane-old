@@ -108,6 +108,7 @@ task("governance-token:upgrade", "Upgrades the OrigamiGovernanceToken contract")
     console.log(timeStamp(), `Upgrading OrigamiGovernanceToken on ${network.name}`);
     const OGT__factory = await ethers.getContractFactory("OrigamiGovernanceToken");
     const OGT = await upgrades.upgradeProxy(args.proxyAddress, OGT__factory);
+    console.log(timeStamp(), `OrigamiGovernanceToken transaction ${OGT.deployTransaction.hash}`);
     console.log(timeStamp(), `OrigamiGovernanceToken upgraded at ${OGT.address}`);
   });
 
