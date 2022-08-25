@@ -130,3 +130,37 @@ task("membership-token:upgrade-forced", "Upgrades the OrigamiMembershipToken con
     const OMT = await upgrades.upgradeProxy(args.proxyAddress, OMT__factory);
     console.log(timeStamp(), `OrigamiMembershipToken upgraded at ${OMT.address}`);
   });
+
+task("membership-token:grant-app-roles", "Idempotently grants the minter and revoker roles to the specified address")
+  .addParam("proxyAddress", "address of the OrigamiMembershipToken proxy")
+  .addParam("appRoleRecipient", "address of the recipient of the application roles")
+  .addFlag("verboseOutput", "Adds verbose output")
+  .setAction(async (args: TaskArguments, { ethers }) => {
+    console.log({ args });
+    console.log(timeStamp(), `Granting application roles to ${args.appRoleRecipient}`);
+    const OMT__factory = await ethers.getContractFactory("OrigamiMembershipToken");
+    const OMT = await OMT__factory.attach(args.proxyAddress);
+
+    const minterRole = await OMT.MINTER_ROLE();
+    const revokerRole = await OMT.REVOKER_ROLE();
+    const hasMinterRole = await OMT.hasRole(minterRole, args.appRoleRecipient);
+    const hasRevokerRole = await OMT.hasRole(revokerRole, args.appRoleRecipient);
+
+    verboseLog(args, { hasMinterRole, hasRevokerRole });
+
+    if (hasMinterRole) {
+      verboseLog(args, "minter role already granted");
+    } else {
+      await OMT.grantRole(minterRole, args.appRoleRecipient);
+      verboseLog(args, "minter role granted");
+    }
+
+    if (hasRevokerRole) {
+      verboseLog(args, "revoker role already granted");
+    } else {
+      await OMT.grantRole(revokerRole, args.appRoleRecipient);
+      verboseLog(args, "revoker role granted");
+    }
+
+    console.log(timeStamp(), `Application roles granted to ${args.appRoleRecipient}`);
+  });
