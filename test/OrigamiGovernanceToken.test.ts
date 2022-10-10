@@ -34,7 +34,7 @@ describe("GovernanceToken", function () {
   });
 
   describe("upgrading", () => {
-    it("reverts when upgrading to the zero address", async () => {
+    it("successfully upgrades", async () => {
       // this version does not have a transferenabled event emitted
       const OGBIAF__factory = await ethers.getContractFactory("OrigamiGovernanceTokenBeforeInitialAuditFeedback");
       // this version _does_ emit a transferenabled event
@@ -144,6 +144,13 @@ describe("GovernanceToken", function () {
     it("prevents calling enableBurn when already enabled", async function () {
       await OGT.connect(owner).enableBurn();
       await expect(OGT.connect(owner).enableBurn()).to.be.revertedWith("Burnable: burning is enabled");
+    });
+
+    it("prevents mintee from burning", async function () {
+      await OGT.connect(minter).mint(mintee.address, 2);
+      await OGT.connect(owner).enableBurn();
+      await OGT.connect(mintee).burn(1);
+      expect(await OGT.balanceOf(mintee.address)).to.equal(1);
     });
 
     it("allows burning when enabled", async function () {
